@@ -3,7 +3,7 @@ package models
 import "time"
 
 type Cart struct {
-	Id         string
+	ID         string
 	Box        int
 	Data       []byte
 	CreateTime time.Time

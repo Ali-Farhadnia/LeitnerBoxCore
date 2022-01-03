@@ -23,7 +23,7 @@ func main() {
 		case "add\r\n":
 			fmt.Print("data:")
 			data, _ := reader.ReadString('\n')
-			err := service.AddCart([]byte(data), db)
+			err := service.AddCard([]byte(data), db)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -38,10 +38,10 @@ func main() {
 					fmt.Print("Are you remember(yes or no):")
 					yn, _ := reader.ReadString('\n')
 					if yn == "yes\r\n" {
-						service.ConfirmTheCard(cart.Id, db)
+						service.ConfirmTheCard(cart.ID, db)
 						break
 					} else if yn == "no\r\n" {
-						service.RejectTheCard(cart.Id, db)
+						service.RejectTheCard(cart.ID, db)
 						break
 					}
 

@@ -8,9 +8,9 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-func AddCart(data []byte, database interfaces.Database) error {
+func AddCard(data []byte, database interfaces.Database) error {
 	id := uuid.NewV4().String()
-	newcart := models.Cart{Id: id, Data: data, CreateTime: time.Now(), Box: 1}
+	newcart := models.Cart{ID: id, Data: data, CreateTime: time.Now(), Box: 1}
 
 	return database.AddNewCart(newcart)
 }

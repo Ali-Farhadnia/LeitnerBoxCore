@@ -112,13 +112,13 @@ func (db *DB) AddNewCart(card models.Cart) error {
 	}
 	fmt.Println("---------------1------------")
 	sqlStatement := `INSERT INTO card (id, box, data, createtime) VALUES ($1,$2,$3,$4)`
-	res, err := db.client.Exec(sqlStatement, card.Id, card.Box, card.Data, card.CreateTime)
+	res, err := db.client.Exec(sqlStatement, card.ID, card.Box, card.Data, card.CreateTime)
 	if err != nil {
 		return err
 	}
 	//stmt, _ := db.client.Prepare("INSERT INTO card (id, box, data, createtime) VALUES (?, ?, ?, ?)")
 	fmt.Println("---------------2------------")
-	fmt.Println("id:", card.Id)
+	fmt.Println("id:", card.ID)
 	fmt.Println("Box:", card.Box)
 	fmt.Println("Data:", card.Data)
 	fmt.Println("CreateTime:", card.CreateTime)
@@ -157,7 +157,7 @@ func (db *DB) GetCarts() ([]*models.Cart, error) {
 	for rows.Next() {
 		card := models.Cart{}
 		var t string
-		err = rows.Scan(&card.Id, &card.Box, &card.Data, &t)
+		err = rows.Scan(&card.ID, &card.Box, &card.Data, &t)
 		if err != nil {
 			return nil, err
 		}
@@ -189,7 +189,7 @@ func (db *DB) FindById(id string) (models.Cart, error) {
 	if err != nil {
 		return models.Cart{}, err
 	}
-	err = row.Scan(&card.Id, &card.Box, &card.Data, &card.CreateTime)
+	err = row.Scan(&card.ID, &card.Box, &card.Data, &card.CreateTime)
 	if err != nil {
 		return models.Cart{}, err
 	}
@@ -203,7 +203,7 @@ func (db *DB) UpdateCart(card models.Cart) error {
 	UPDATE card
 	SET box = $2, data = $3,createtime=$4
 	WHERE id = $1;`
-	res, err := db.client.Exec(sqlStatement, card.Id, card.Box, card.Data, card.CreateTime)
+	res, err := db.client.Exec(sqlStatement, card.ID, card.Box, card.Data, card.CreateTime)
 	if err != nil {
 		return err
 	}
