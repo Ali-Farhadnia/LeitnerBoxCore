@@ -25,6 +25,7 @@ func Review(database interfaces.Database) ([]*models.Cart, error) {
 			wantedcarts = append(wantedcarts, cart)
 		}
 	}
+
 	return wantedcarts, nil
 }
 func ConfirmTheCard(id string, database interfaces.Database) error {
@@ -37,6 +38,7 @@ func ConfirmTheCard(id string, database interfaces.Database) error {
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 func RejectTheCard(id string, database interfaces.Database) error {
@@ -49,5 +51,6 @@ func RejectTheCard(id string, database interfaces.Database) error {
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
