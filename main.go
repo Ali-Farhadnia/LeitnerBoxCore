@@ -11,7 +11,10 @@ import (
 )
 
 func main() {
-	db := database.NewDb()
+	db, err := database.NewDB()
+	if err != nil {
+		log.Fatal(err)
+	}
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		fmt.Print("Do(add or review):")
