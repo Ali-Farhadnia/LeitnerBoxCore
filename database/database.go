@@ -107,10 +107,8 @@ func (db *DB) createbooktable() error {
 
 func (db *DB) AddNewCart(card models.Cart) error {
 	if err := db.checkconnection(); err != nil {
-		fmt.Println("---------------in check")
 		return err
 	}
-	fmt.Println("---------------1------------")
 	sqlStatement := `INSERT INTO card (id, box, data, createtime) VALUES ($1,$2,$3,$4)`
 	res, err := db.client.Exec(sqlStatement, card.ID, card.Box, card.Data, card.CreateTime)
 	if err != nil {
@@ -157,15 +155,11 @@ func (db *DB) GetCarts() ([]models.Cart, error) {
 		if err != nil {
 			return nil, err
 		}
-		time.Now()
 		ti, err := time.Parse("2006-01-02 03:04:05+06:00", t)
 		if err != nil {
 			return nil, err
 		}
 		card.CreateTime = ti
-		if err != nil {
-			return nil, err
-		}
 		cards = append(cards, card)
 	}
 	err = rows.Err()
@@ -185,21 +179,32 @@ func (db *DB) FindById(id string) (models.Cart, error) {
 	if err != nil {
 		return models.Cart{}, err
 	}
-	err = row.Scan(&card.ID, &card.Box, &card.Data, &card.CreateTime)
+	var t string
+
+	err = row.Scan(&card.ID, &card.Box, &card.Data, &t)
 	if err != nil {
 		return models.Cart{}, err
 	}
+	ti, err := time.Parse("2006-01-02 03:04:05+06:00", t)
+	if err != nil {
+		return models.Cart{}, err
+	}
+	card.CreateTime = ti
 	return card, nil
 }
 func (db *DB) UpdateCart(card models.Cart) error {
+	//fmt.Println("--------in update")
+	//defer fmt.Println("--------in update")
 	if err := db.checkconnection(); err != nil {
 		return err
 	}
-	sqlStatement := `
-	UPDATE card
-	SET box = $2, data = $3,createtime=$4
-	WHERE id = $1;`
-	res, err := db.client.Exec(sqlStatement, card.ID, card.Box, card.Data, card.CreateTime)
+	stmt, err := db.client.Prepare("UPDATE card set box = ?, data = ?, createtime = ? where id = ?")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	res, err := stmt.Exec(card.Box, card.Data, card.CreateTime, card.ID)
 	if err != nil {
 		return err
 	}
@@ -211,4 +216,5 @@ func (db *DB) UpdateCart(card models.Cart) error {
 		return errors.New("nothing updated")
 	}
 	return nil
+
 }

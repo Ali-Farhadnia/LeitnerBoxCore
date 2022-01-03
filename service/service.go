@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/Ali-Farhadnia/LeitnerBoxCore/interfaces"
@@ -34,14 +35,17 @@ func Review(database interfaces.Database) ([]models.Cart, error) {
 	return wantedcarts, nil
 }
 func ConfirmTheCard(id string, database interfaces.Database) error {
+	//fmt.Println("=========in confirm")
+	//defer fmt.Println("=========in confirm")
 	cart, err := database.FindById(id)
+
 	if err != nil {
 		return err
 	}
 	cart.Box += 1
 	err = database.UpdateCart(cart)
 	if err != nil {
-		return err
+		fmt.Println(err)
 	}
 
 	return nil
