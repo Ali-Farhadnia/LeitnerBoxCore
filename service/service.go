@@ -10,8 +10,12 @@ import (
 
 func AddCard(data []byte, database interfaces.Database) error {
 	id := uuid.NewV4().String()
-	now := time.Now()
-	newcart := models.Cart{ID: id, Data: data, CreateTime: models.CreateTime{Year: now.Year(), Month: now.Month(), Day: now.Day(), Hour: now.Hour()}, Box: 1}
+	now := time.Now().Format("2006-01-02 03")
+	t, err := time.Parse("2006-01-02 03", now)
+	if err != nil {
+		return err
+	}
+	newcart := models.Cart{ID: id, Data: data, CreateTime: t, Box: 1}
 
 	return database.AddNewCart(newcart)
 }

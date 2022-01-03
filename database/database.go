@@ -162,7 +162,7 @@ func (db *DB) GetCarts() ([]*models.Cart, error) {
 			return nil, err
 		}
 		time.Now()
-		ti, err := time.Parse("2006-01-02 03:04:05.999999999Z07:00", t)
+		ti, err := time.Parse("2006-01-02 03:04:05+06:00", t)
 		if err != nil {
 			return nil, err
 		}
