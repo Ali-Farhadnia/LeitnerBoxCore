@@ -19,9 +19,9 @@ func AddCard(data []byte, database interfaces.Database) error {
 
 	return database.AddNewCart(newcart)
 }
-func Review(database interfaces.Database) ([]*models.Cart, error) {
+func Review(database interfaces.Database) ([]models.Cart, error) {
 	allcarts, err := database.GetCarts()
-	wantedcarts := make([]*models.Cart, 0)
+	wantedcarts := make([]models.Cart, 0)
 	if err != nil {
 		return nil, err
 	}

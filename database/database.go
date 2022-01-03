@@ -134,7 +134,7 @@ func (db *DB) AddNewCart(card models.Cart) error {
 	//fmt.Printf("Added %v %v \n", newPerson.first_name, newPerson.last_name
 }
 
-func (db *DB) GetCarts() ([]*models.Cart, error) {
+func (db *DB) GetCarts() ([]models.Cart, error) {
 	if err := db.checkconnection(); err != nil {
 		return nil, err
 	}
@@ -149,7 +149,7 @@ func (db *DB) GetCarts() ([]*models.Cart, error) {
 	if err != nil {
 		return nil, err
 	}
-	cards := make([]*models.Cart, 0)
+	cards := make([]models.Cart, 0)
 	for rows.Next() {
 		card := models.Cart{}
 		var t string
@@ -166,7 +166,7 @@ func (db *DB) GetCarts() ([]*models.Cart, error) {
 		if err != nil {
 			return nil, err
 		}
-		cards = append(cards, &card)
+		cards = append(cards, card)
 	}
 	err = rows.Err()
 	if err != nil {
