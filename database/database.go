@@ -116,14 +116,12 @@ func (db *DB) AddNewCart(card models.Cart) error {
 	if err != nil {
 		return err
 	}
-	//stmt, _ := db.client.Prepare("INSERT INTO card (id, box, data, createtime) VALUES (?, ?, ?, ?)")
-	fmt.Println("---------------2------------")
+	fmt.Println("---------------------------")
 	fmt.Println("id:", card.ID)
 	fmt.Println("Box:", card.Box)
 	fmt.Println("Data:", card.Data)
 	fmt.Println("CreateTime:", card.CreateTime)
-	//stmt.Exec(card.Id, card.Box, card.Data, card.CreateTime)
-	fmt.Println("---------------3------------")
+	fmt.Println("---------------------------")
 	affected, err := res.RowsAffected()
 	if err != nil {
 		return err
@@ -131,8 +129,6 @@ func (db *DB) AddNewCart(card models.Cart) error {
 	if affected == 0 {
 		return errors.New("nothing updated")
 	}
-	//defer stmt.Close()
-	fmt.Println("---------------4------------")
 
 	return nil
 	//fmt.Printf("Added %v %v \n", newPerson.first_name, newPerson.last_name
