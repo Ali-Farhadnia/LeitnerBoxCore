@@ -97,6 +97,7 @@ func HandleFunc(db *database.DB, opts []wmenu.Opt) error {
 			return err
 		}
 		if len(carts) == 0 {
+			fmt.Println(string(ColorRed) + "nothings to review" + string(ColorReset))
 			return errors.New("nothings to review")
 		}
 		for _, card := range carts {
