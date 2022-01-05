@@ -63,3 +63,10 @@ func RejectTheCard(id string, database interfaces.Database) error {
 
 	return nil
 }
+func UpdateCart(card models.Cart, database interfaces.Database) error {
+	err := database.UpdateCart(card)
+	if err != nil {
+		return err
+	}
+	return nil
+}
