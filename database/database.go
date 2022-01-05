@@ -51,6 +51,7 @@ func NewDB() (*DB, error) {
 	}
 	return &rdb, nil
 }
+
 func (db *DB) checkconnection() error {
 	err := db.client.Ping()
 	if err != nil {
@@ -62,6 +63,7 @@ func (db *DB) checkconnection() error {
 	}
 	return nil
 }
+
 func (db *DB) createbooktable() error {
 	if err := db.checkconnection(); err != nil {
 		return err
@@ -80,7 +82,7 @@ func (db *DB) createbooktable() error {
 	if err != nil {
 		switch err.Error() {
 		case e:
-			log.Println("books card created")
+			//log.Println("books card created")
 			return nil
 		case "":
 			log.Println("failed to create card table")
@@ -98,7 +100,7 @@ func (db *DB) createbooktable() error {
 			if e == 0 {
 				return errors.New("somthing went wrong in create table")
 			}
-			log.Println("books card created")
+			//log.Println("books card created")
 			return nil
 		}
 	}
@@ -114,12 +116,14 @@ func (db *DB) AddNewCart(card models.Cart) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("---------------------------")
-	fmt.Println("id:", card.ID)
-	fmt.Println("Box:", card.Box)
-	fmt.Println("Data:", card.Data)
-	fmt.Println("CreateTime:", card.CreateTime)
-	fmt.Println("---------------------------")
+	/*
+		fmt.Println("---------------------------")
+		fmt.Println("id:", card.ID)
+		fmt.Println("Box:", card.Box)
+		fmt.Println("Data:", card.Data)
+		fmt.Println("CreateTime:", card.CreateTime)
+		fmt.Println("---------------------------")
+	*/
 	affected, err := res.RowsAffected()
 	if err != nil {
 		return err
@@ -129,7 +133,6 @@ func (db *DB) AddNewCart(card models.Cart) error {
 	}
 
 	return nil
-	//fmt.Printf("Added %v %v \n", newPerson.first_name, newPerson.last_name
 }
 
 func (db *DB) GetCarts() ([]models.Cart, error) {
@@ -168,6 +171,7 @@ func (db *DB) GetCarts() ([]models.Cart, error) {
 	}
 	return cards, nil
 }
+
 func (db *DB) FindById(id string) (models.Cart, error) {
 	if err := db.checkconnection(); err != nil {
 		return models.Cart{}, err
@@ -192,6 +196,7 @@ func (db *DB) FindById(id string) (models.Cart, error) {
 	card.CreateTime = ti
 	return card, nil
 }
+
 func (db *DB) UpdateCart(card models.Cart) error {
 	//fmt.Println("--------in update")
 	//defer fmt.Println("--------in update")
@@ -216,5 +221,4 @@ func (db *DB) UpdateCart(card models.Cart) error {
 		return errors.New("nothing updated")
 	}
 	return nil
-
 }
