@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"runtime"
 	"strconv"
 	"strings"
 
@@ -15,7 +16,7 @@ import (
 	"gopkg.in/dixonwille/wlog.v2"
 )
 
-const (
+var (
 	ColorReset  = "\033[0m"
 	ColorRed    = "\033[31m"
 	ColorGreen  = "\033[32m"
@@ -25,6 +26,20 @@ const (
 	ColorCyan   = "\033[36m"
 	ColorWhite  = "\033[37m"
 )
+
+func init() {
+	if runtime.GOOS == "windows" {
+		ColorReset = ""
+		ColorRed = ""
+		ColorGreen = ""
+		ColorYellow = ""
+		ColorBlue = ""
+		ColorPurple = ""
+		ColorCyan = ""
+		ColorWhite = ""
+	}
+}
+
 const (
 	//add options
 	set_data = 0
