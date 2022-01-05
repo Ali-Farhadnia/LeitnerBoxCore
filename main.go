@@ -11,6 +11,8 @@ import (
 	"github.com/dixonwille/wmenu"
 )
 
+const exit = -1
+
 func main() {
 	db, err := database.NewDB()
 	if err != nil {
@@ -20,10 +22,11 @@ func main() {
 	menu.Action(func(opts []wmenu.Opt) error { inputhandler.HandleFunc(db, opts); return nil })
 	menu.Option("Add a new card", 0, false, nil)
 	menu.Option("Review all cards", 1, false, nil)
+	menu.Option("exit", exit, false, nil)
 	menu.LoopOnInvalid()
 	menu.AddColor(wlog.BrightBlue, wlog.BrightYellow, wlog.BrightBlue, wlog.Red)
 	for {
-		fmt.Println("============================")
+		fmt.Println("=========================================================")
 		err = menu.Run()
 		if err != nil {
 			log.Fatal(err)
