@@ -3,9 +3,9 @@ package interfaces
 import "github.com/Ali-Farhadnia/LeitnerBoxCore/models"
 
 type Database interface {
-	AddNewCard(models.Cart) error
-	GetCards() ([]models.Cart, error)
-	FindById(string) (models.Cart, error)
-	UpdateCard(models.Cart) error
+	AddNewCard(models.Card) error
+	GetCards() ([]models.Card, error)
+	FindById(string) (models.Card, error)
+	UpdateCard(models.Card) error
 	DeleteCard(string) error
 }

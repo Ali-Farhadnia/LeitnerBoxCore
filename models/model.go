@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-type Cart struct {
+type Card struct {
 	ID         string
 	Box        int
 	Data       []byte

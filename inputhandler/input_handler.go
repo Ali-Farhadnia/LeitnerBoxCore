@@ -85,7 +85,7 @@ func HandleFunc(db *database.DB, opts []wmenu.Opt) error {
 	case 0:
 		fmt.Println("--------------------------------")
 		defer fmt.Println("--------------------------------")
-		newcard := models.Cart{}
+		newcard := models.Card{}
 		flag := true
 		for flag {
 			addmenu.Action(func(opts []wmenu.Opt) error {
@@ -136,7 +136,7 @@ func HandleFunc(db *database.DB, opts []wmenu.Opt) error {
 	}
 	return nil
 }
-func HandleReview(opt wmenu.Opt, db *database.DB, card *models.Cart) error {
+func HandleReview(opt wmenu.Opt, db *database.DB, card *models.Card) error {
 	reader := bufio.NewReader(os.Stdin)
 
 	//edit card menu
@@ -201,7 +201,7 @@ func HandleReview(opt wmenu.Opt, db *database.DB, card *models.Cart) error {
 				fmt.Println(string(ColorRed) + "unvalid input" + string(ColorReset))
 			}
 		}
-		err = service.DeleteCart(card.ID, db)
+		err = service.DeleteCard(card.ID, db)
 		if err != nil {
 			return err
 		}
@@ -214,7 +214,7 @@ func HandleReview(opt wmenu.Opt, db *database.DB, card *models.Cart) error {
 	}
 	return nil
 }
-func HandleEdit(opt wmenu.Opt, db *database.DB, card *models.Cart) error {
+func HandleEdit(opt wmenu.Opt, db *database.DB, card *models.Card) error {
 	reader := bufio.NewReader(os.Stdin)
 
 	switch opt.Value {
@@ -265,7 +265,7 @@ func HandleEdit(opt wmenu.Opt, db *database.DB, card *models.Cart) error {
 		card.Box = ibox
 		return err_not_complete
 	case save:
-		err := service.UpdateCart(*card, db)
+		err := service.UpdateCard(*card, db)
 		if err != nil {
 			return err
 		}
@@ -276,7 +276,7 @@ func HandleEdit(opt wmenu.Opt, db *database.DB, card *models.Cart) error {
 	}
 	return nil
 }
-func HandleAdd(opt wmenu.Opt, db *database.DB, card *models.Cart) error {
+func HandleAdd(opt wmenu.Opt, db *database.DB, card *models.Card) error {
 	reader := bufio.NewReader(os.Stdin)
 	switch opt.Value {
 	case set_data:
@@ -301,10 +301,11 @@ func HandleAdd(opt wmenu.Opt, db *database.DB, card *models.Cart) error {
 		card.Data = []byte(data)
 		return err_not_complete
 	case add:
-		err := service.AddCard(card.Data, db) //To Do return card or id
+		card, err := service.AddCard(card.Data, db) //To Do return card or id
 		if err != nil {
 			return err
 		}
+		PrintCard(card, true, true, true, true)
 		fmt.Println(string(ColorGreen) + "Successful" + string(ColorReset))
 		return nil
 	case cancel:
@@ -312,7 +313,7 @@ func HandleAdd(opt wmenu.Opt, db *database.DB, card *models.Cart) error {
 	}
 	return nil
 }
-func PrintCard(card models.Cart, show_id, show_box, show_data, show_create_time bool) {
+func PrintCard(card models.Card, show_id, show_box, show_data, show_create_time bool) {
 	fmt.Println(string(ColorPurple) + "**************** card ****************")
 	if show_id {
 		fmt.Println("ID:", card.ID)

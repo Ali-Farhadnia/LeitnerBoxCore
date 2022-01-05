@@ -107,7 +107,7 @@ func (db *DB) createbooktable() error {
 	return nil
 }
 
-func (db *DB) AddNewCard(card models.Cart) error {
+func (db *DB) AddNewCard(card models.Card) error {
 	if err := db.checkconnection(); err != nil {
 		return err
 	}
@@ -135,7 +135,7 @@ func (db *DB) AddNewCard(card models.Cart) error {
 	return nil
 }
 
-func (db *DB) GetCards() ([]models.Cart, error) {
+func (db *DB) GetCards() ([]models.Card, error) {
 	if err := db.checkconnection(); err != nil {
 		return nil, err
 	}
@@ -150,9 +150,9 @@ func (db *DB) GetCards() ([]models.Cart, error) {
 	if err != nil {
 		return nil, err
 	}
-	cards := make([]models.Cart, 0)
+	cards := make([]models.Card, 0)
 	for rows.Next() {
-		card := models.Cart{}
+		card := models.Card{}
 		var t string
 		err = rows.Scan(&card.ID, &card.Box, &card.Data, &t)
 		if err != nil {
@@ -172,32 +172,32 @@ func (db *DB) GetCards() ([]models.Cart, error) {
 	return cards, nil
 }
 
-func (db *DB) FindById(id string) (models.Cart, error) {
+func (db *DB) FindById(id string) (models.Card, error) {
 	if err := db.checkconnection(); err != nil {
-		return models.Cart{}, err
+		return models.Card{}, err
 	}
-	var card models.Cart
+	var card models.Card
 	sqlStatement := `SELECT * FROM card WHERE id=$1;`
 	row := db.client.QueryRow(sqlStatement, id)
 	err := row.Err()
 	if err != nil {
-		return models.Cart{}, err
+		return models.Card{}, err
 	}
 	var t string
 
 	err = row.Scan(&card.ID, &card.Box, &card.Data, &t)
 	if err != nil {
-		return models.Cart{}, err
+		return models.Card{}, err
 	}
 	ti, err := time.Parse("2006-01-02 03:04:05+06:00", t)
 	if err != nil {
-		return models.Cart{}, err
+		return models.Card{}, err
 	}
 	card.CreateTime = ti
 	return card, nil
 }
 
-func (db *DB) UpdateCard(card models.Cart) error {
+func (db *DB) UpdateCard(card models.Card) error {
 	//fmt.Println("--------in update")
 	//defer fmt.Println("--------in update")
 	if err := db.checkconnection(); err != nil {
