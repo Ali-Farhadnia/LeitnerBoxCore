@@ -226,7 +226,7 @@ func (db *DB) DeleteCard(id string) error {
 	if err := db.checkconnection(); err != nil {
 		return err
 	}
-	stmt, err := db.client.Prepare("DELETE FROM people where id = ?")
+	stmt, err := db.client.Prepare("DELETE FROM card where id = ?")
 	if err != nil {
 		return err
 	}
