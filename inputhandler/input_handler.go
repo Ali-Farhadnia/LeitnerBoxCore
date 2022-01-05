@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/Ali-Farhadnia/LeitnerBoxCore/database"
@@ -36,7 +37,8 @@ const (
 	next   = 4
 	//edit options
 	edit_data = 0
-	save      = 1
+	edit_box  = 1
+	save      = 2
 	//comon options
 	cancel = -2
 )
@@ -124,6 +126,7 @@ func HandleReview(opt wmenu.Opt, db *database.DB, card *models.Cart) error {
 	editmenu.LoopOnInvalid()
 	editmenu.AddColor(wlog.Cyan, wlog.BrightYellow, wlog.BrightCyan, wlog.BrightRed)
 	editmenu.Option("edit data", edit_data, false, nil)
+	editmenu.Option("edit box", edit_box, false, nil)
 	editmenu.Option("save", save, false, nil)
 	editmenu.Option("cancel", cancel, false, nil)
 	switch opt.Value {
@@ -140,6 +143,8 @@ func HandleReview(opt wmenu.Opt, db *database.DB, card *models.Cart) error {
 		fmt.Println(string(ColorGreen) + "Successful" + string(ColorReset))
 		return nil
 	case edit:
+		fmt.Println("--------------------------------")
+		defer fmt.Println("--------------------------------")
 		flag := true
 		for flag {
 			editmenu.Action(func(opts []wmenu.Opt) error {
@@ -155,10 +160,10 @@ func HandleReview(opt wmenu.Opt, db *database.DB, card *models.Cart) error {
 				flag = false
 				return nil
 			})
-			PrintCard(*card, false, false, true, false)
+			PrintCard(*card, false, true, true, false)
 			editmenu.Run()
 		}
-		return errors.New("not supported yet")
+		return nil
 	case delete:
 		return errors.New("not supported yet")
 	case next:
@@ -193,10 +198,42 @@ func HandleEdit(opt wmenu.Opt, db *database.DB, card *models.Cart) error {
 		fmt.Println(string(ColorGreen) + "Successful" + string(ColorReset))
 		card.Data = []byte(data)
 		return err_not_complete
-	case save:
-	case cancel:
 
+	case edit_box:
+		sbox := ""
+		ibox := 0
+		var err error
+		for {
+			fmt.Print("Box :")
+			sbox, err = reader.ReadString('\n')
+			if err != nil {
+				return err
+			}
+			sbox = strings.TrimSuffix(sbox, "\n")
+			sbox = strings.TrimSuffix(sbox, "\r")
+			i, err := strconv.Atoi(sbox)
+			if err != nil {
+				fmt.Println(string(ColorRed) + "unvalid input" + string(ColorReset))
+				continue
+			} else {
+				ibox = i
+				break
+			}
+		}
+		fmt.Println(string(ColorGreen) + "Successful" + string(ColorReset))
+		card.Box = ibox
+		return err_not_complete
+	case save:
+		err := service.UpdateCart(*card, db)
+		if err != nil {
+			return err
+		}
+		fmt.Println(string(ColorGreen) + "Successful" + string(ColorReset))
+		return nil
+	case cancel:
+		return nil
 	}
+	return nil
 }
 func HandleAdd(opt wmenu.Opt, db *database.DB, card *models.Cart) error {
 	reader := bufio.NewReader(os.Stdin)
