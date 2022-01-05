@@ -193,7 +193,7 @@ func HandleReview(opt wmenu.Opt, db *database.DB, card *models.Cart) error {
 		fmt.Println(string(ColorGreen) + "Successful" + string(ColorReset))
 		return nil
 	case next:
-		return errors.New("not supported yet")
+		return nil
 	case cancel:
 		return nil
 	}
