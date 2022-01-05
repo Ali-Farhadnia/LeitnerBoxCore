@@ -121,6 +121,8 @@ func HandleFunc(db *database.DB, opts []wmenu.Opt) error {
 	return nil
 }
 func HandleReview(opt wmenu.Opt, db *database.DB, card *models.Cart) error {
+	reader := bufio.NewReader(os.Stdin)
+
 	//edit card menu
 	editmenu := wmenu.NewMenu("select one:")
 	editmenu.LoopOnInvalid()
@@ -165,7 +167,30 @@ func HandleReview(opt wmenu.Opt, db *database.DB, card *models.Cart) error {
 		}
 		return nil
 	case delete:
-		return errors.New("not supported yet")
+		input := ""
+		var err error
+		for {
+			fmt.Print("Are you sure(yes or no)?")
+			input, err = reader.ReadString('\n')
+			if err != nil {
+				return err
+			}
+			input = strings.TrimSuffix(input, "\n")
+			input = strings.TrimSuffix(input, "\r")
+			if input == "yes" {
+				break
+			} else if input == "no" {
+				return nil
+			} else {
+				fmt.Println(string(ColorRed) + "unvalid input" + string(ColorReset))
+			}
+		}
+		err = service.DeleteCart(card.ID, db)
+		if err != nil {
+			return err
+		}
+		fmt.Println(string(ColorGreen) + "Successful" + string(ColorReset))
+		return nil
 	case next:
 		return errors.New("not supported yet")
 	case cancel:

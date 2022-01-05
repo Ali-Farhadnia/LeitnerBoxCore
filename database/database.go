@@ -107,7 +107,7 @@ func (db *DB) createbooktable() error {
 	return nil
 }
 
-func (db *DB) AddNewCart(card models.Cart) error {
+func (db *DB) AddNewCard(card models.Cart) error {
 	if err := db.checkconnection(); err != nil {
 		return err
 	}
@@ -135,7 +135,7 @@ func (db *DB) AddNewCart(card models.Cart) error {
 	return nil
 }
 
-func (db *DB) GetCarts() ([]models.Cart, error) {
+func (db *DB) GetCards() ([]models.Cart, error) {
 	if err := db.checkconnection(); err != nil {
 		return nil, err
 	}
@@ -197,7 +197,7 @@ func (db *DB) FindById(id string) (models.Cart, error) {
 	return card, nil
 }
 
-func (db *DB) UpdateCart(card models.Cart) error {
+func (db *DB) UpdateCard(card models.Cart) error {
 	//fmt.Println("--------in update")
 	//defer fmt.Println("--------in update")
 	if err := db.checkconnection(); err != nil {
@@ -219,6 +219,29 @@ func (db *DB) UpdateCart(card models.Cart) error {
 	}
 	if affected == 0 {
 		return errors.New("nothing updated")
+	}
+	return nil
+}
+func (db *DB) DeleteCard(id string) error {
+	if err := db.checkconnection(); err != nil {
+		return err
+	}
+	stmt, err := db.client.Prepare("DELETE FROM people where id = ?")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	res, err := stmt.Exec(id)
+	if err != nil {
+		return err
+	}
+	affected, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if affected == 0 {
+		return errors.New("nothing deleted")
 	}
 	return nil
 }
