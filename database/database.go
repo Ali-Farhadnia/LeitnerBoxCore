@@ -112,7 +112,7 @@ func (db *DB) AddNewCard(card models.Card) error {
 		return err
 	}
 	sqlStatement := `INSERT INTO card (id, box, data, createtime) VALUES ($1,$2,$3,$4)`
-	res, err := db.client.Exec(sqlStatement, card.ID, card.Box, card.Data, card.CreateTime)
+	res, err := db.client.Exec(sqlStatement, card.ID, card.Box, card.Data, card.CreateTime.String())
 	if err != nil {
 		return err
 	}
@@ -158,11 +158,11 @@ func (db *DB) GetCards() ([]models.Card, error) {
 		if err != nil {
 			return nil, err
 		}
-		ti, err := time.Parse("2006-01-02 03:04:05+06:00", t)
+		ti, err := time.Parse("2006-01-02 15:04:05 -0700 MST", t)
 		if err != nil {
 			return nil, err
 		}
-		card.CreateTime = ti
+		card.CreateTime = ti.UTC().Local()
 		cards = append(cards, card)
 	}
 	err = rows.Err()

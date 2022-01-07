@@ -109,6 +109,7 @@ func HandleFunc(db *database.DB, opts []wmenu.Opt) error {
 		defer fmt.Println("--------------------------------")
 		carts, err := service.Review(db)
 		if err != nil {
+			fmt.Println("in review if", err)
 			return err
 		}
 		if len(carts) == 0 {
@@ -116,7 +117,8 @@ func HandleFunc(db *database.DB, opts []wmenu.Opt) error {
 			return errors.New("nothings to review")
 		}
 		for _, card := range carts {
-
+			fmt.Println("in review loop")
+			fmt.Println(card)
 			PrintCard(card, true, true, true, true)
 			reviewmenu.Action(func(opts []wmenu.Opt) error {
 				err := HandleReview(opts[0], db, &card)

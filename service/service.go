@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/Ali-Farhadnia/LeitnerBoxCore/interfaces"
@@ -10,13 +11,9 @@ import (
 
 func AddCard(data []byte, database interfaces.Database) (models.Card, error) {
 	id := uuid.NewV4().String()
-	now := time.Now().Format("2006-01-02 03")
-	t, err := time.Parse("2006-01-02 03", now)
-	if err != nil {
-		return models.Card{}, err
-	}
-	newcart := models.Card{ID: id, Data: data, CreateTime: t, Box: 1}
-	err = database.AddNewCard(newcart)
+	now := time.Now().UTC()
+	newcart := models.Card{ID: id, Data: data, CreateTime: now, Box: 1}
+	err := database.AddNewCard(newcart)
 	if err != nil {
 		return models.Card{}, err
 	}
@@ -25,6 +22,7 @@ func AddCard(data []byte, database interfaces.Database) (models.Card, error) {
 func Review(database interfaces.Database) ([]models.Card, error) {
 	allcarts, err := database.GetCards()
 	if err != nil {
+		fmt.Println("in review service if :", err)
 		return nil, err
 	}
 	wantedcarts := make([]models.Card, 0)
