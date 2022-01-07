@@ -109,7 +109,7 @@ func HandleFunc(db *database.DB, opts []wmenu.Opt) error {
 		defer fmt.Println("--------------------------------")
 		carts, err := service.Review(db)
 		if err != nil {
-			fmt.Println("in review if", err)
+			fmt.Println(string(ColorRed) + err.Error() + string(ColorReset))
 			return err
 		}
 		if len(carts) == 0 {

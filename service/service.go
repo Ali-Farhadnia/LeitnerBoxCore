@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/Ali-Farhadnia/LeitnerBoxCore/interfaces"
@@ -22,7 +21,6 @@ func AddCard(data []byte, database interfaces.Database) (models.Card, error) {
 func Review(database interfaces.Database) ([]models.Card, error) {
 	allcarts, err := database.GetCards()
 	if err != nil {
-		fmt.Println("in review service if :", err)
 		return nil, err
 	}
 	wantedcarts := make([]models.Card, 0)
