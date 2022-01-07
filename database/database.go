@@ -72,10 +72,10 @@ func (db *DB) createbooktable() error {
 	e := fmt.Sprintf("table %s already exists", "card")
 	sqlStatement := `
 	CREATE TABLE card (
-		id VARCHAR ( 50 ) NOT NULL UNIQUE PRIMARY KEY,
-		box INT ( 50 ) NOT NULL,
-		data VARBINARY(500)  NOT NULL,
-		createtime VARCHAR (50) NOT NULL
+		id TEXT NOT NULL UNIQUE PRIMARY KEY,
+		box INT NOT NULL,
+		data TEXT NOT NULL,
+		createtime datetime NOT NULL
 	);
 	`
 	res, err := db.client.Exec(sqlStatement)
@@ -112,7 +112,7 @@ func (db *DB) AddNewCard(card models.Card) error {
 		return err
 	}
 	sqlStatement := `INSERT INTO card (id, box, data, createtime) VALUES ($1,$2,$3,$4)`
-	res, err := db.client.Exec(sqlStatement, card.ID, card.Box, card.Data, card.CreateTime.String())
+	res, err := db.client.Exec(sqlStatement, card.ID, card.Box, card.Data, card.CreateTime)
 	if err != nil {
 		return err
 	}
@@ -152,17 +152,20 @@ func (db *DB) GetCards() ([]models.Card, error) {
 	}
 	cards := make([]models.Card, 0)
 	for rows.Next() {
-		card := models.Card{}
-		var t string
-		err = rows.Scan(&card.ID, &card.Box, &card.Data, &t)
+		card := models.Card{CreateTime: &time.Time{}}
+		//var t time.Time
+		err = rows.Scan(&card.ID, &card.Box, &card.Data, card.CreateTime)
 		if err != nil {
 			return nil, err
 		}
-		ti, err := time.Parse("2006-01-02 15:04:05 -0700 MST", t)
-		if err != nil {
-			return nil, err
-		}
-		card.CreateTime = ti.UTC().Local()
+
+		/*
+			ti, err := time.Parse("2006-01-02 15:04:05 -0700 MST", t)
+			if err != nil {
+				return nil, err
+			}
+			card.CreateTime = ti.UTC().Local()
+		*/
 		cards = append(cards, card)
 	}
 	err = rows.Err()
@@ -193,7 +196,7 @@ func (db *DB) FindById(id string) (models.Card, error) {
 	if err != nil {
 		return models.Card{}, err
 	}
-	card.CreateTime = ti
+	card.CreateTime = &ti
 	return card, nil
 }
 
@@ -203,7 +206,7 @@ func (db *DB) UpdateCard(card models.Card) error {
 	if err := db.checkconnection(); err != nil {
 		return err
 	}
-	stmt, err := db.client.Prepare("UPDATE card set box = ?, data = ?, createtime = ? where id = ?")
+	stmt, err := db.client.Prepare("UPDATE card SET box = ?, data = ?, createtime = ? where id = ?")
 	if err != nil {
 		return err
 	}

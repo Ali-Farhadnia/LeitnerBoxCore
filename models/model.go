@@ -6,5 +6,5 @@ type Card struct {
 	ID         string
 	Box        int
 	Data       []byte
-	CreateTime time.Time
+	CreateTime *time.Time
 }
