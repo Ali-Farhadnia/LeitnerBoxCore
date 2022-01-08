@@ -25,7 +25,7 @@ linters:
     - unconvert
     - revive
     - godot
-    # - golint
+    - golint
     - scopelint
     - funlen
     - cyclop
