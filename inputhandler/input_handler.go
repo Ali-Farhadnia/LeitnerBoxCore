@@ -16,6 +16,7 @@ import (
 	"gopkg.in/dixonwille/wlog.v2"
 )
 
+// Colors
 var (
 	ColorReset  = "\033[0m"
 	ColorRed    = "\033[31m"
@@ -27,6 +28,7 @@ var (
 	ColorWhite  = "\033[37m"
 )
 
+// init() check if programm run on windows set color value to "".
 func init() {
 	if runtime.GOOS == "windows" {
 		ColorReset = ""
@@ -58,8 +60,10 @@ const (
 	cancel = -2
 )
 
+// errNotComplete is error that Used to announce that the program is not finished.
 var errNotComplete = errors.New("not complete yet")
 
+//HandleFunc main input handler
 func HandleFunc(db interfaces.Database, opts []wmenu.Opt) error {
 	//review menu
 	reviewmenu := wmenu.NewMenu("Select one:")

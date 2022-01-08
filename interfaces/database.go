@@ -2,6 +2,7 @@ package interfaces
 
 import "github.com/Ali-Farhadnia/LeitnerBoxCore/models"
 
+// Database use in service.
 type Database interface {
 	AddNewCard(models.Card) error
 	GetCards() ([]models.Card, error)

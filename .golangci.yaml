@@ -6,13 +6,11 @@ run:
 linters:
   enable-all: true
   disable:
-    - goimports
     - wrapcheck
     - forbidigo
     - gochecknoinits
     - gocritic
     - gofumpt
-    - golint
     - gosec
     - whitespace
     - wsl
@@ -27,6 +25,7 @@ linters:
     - unconvert
     - revive
     - godot
+    # - golint
     - scopelint
     - funlen
     - cyclop
