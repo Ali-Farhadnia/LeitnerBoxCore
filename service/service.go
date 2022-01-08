@@ -68,9 +68,9 @@ func UpdateCard(card models.Card, database interfaces.Database) error {
 	return nil
 }
 func DeleteCard(id string, database interfaces.Database) error {
-	err := database.DeleteCard(id)
-	if err != nil {
+	if err := database.DeleteCard(id); err != nil {
 		return err
 	}
+
 	return nil
 }

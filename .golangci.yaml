@@ -33,5 +33,5 @@ linters:
     - scopelint
     - funlen
     - cyclop
-    - ifshort
+    #- ifshort
     #- errorlint
