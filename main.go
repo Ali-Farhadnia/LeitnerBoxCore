@@ -6,9 +6,8 @@ import (
 
 	"github.com/Ali-Farhadnia/LeitnerBoxCore/database"
 	"github.com/Ali-Farhadnia/LeitnerBoxCore/inputhandler"
-	"gopkg.in/dixonwille/wlog.v2"
-
 	"github.com/dixonwille/wmenu"
+	"gopkg.in/dixonwille/wlog.v2"
 )
 
 const exit = -1
