@@ -5,5 +5,33 @@ run:
 
 linters:
   enable-all: true
-
-    
+  disable:
+    - gofmt
+    - goimports
+    - wrapcheck
+    - forbidigo
+    - gochecknoinits
+    - gocritic
+    - gofumpt
+    - golint
+    - gosec
+    - whitespace
+    - wsl
+    - gochecknoglobals
+    - goerr113
+    - nlreturn
+    - predeclared
+    - wastedassign
+    - varnamelen
+    - paralleltest
+    - exhaustivestruct
+    - unconvert
+    - revive
+    - godot
+    - stylecheck
+    - errname
+    - scopelint
+    - funlen
+    - cyclop
+    - ifshort
+    - errorlint
