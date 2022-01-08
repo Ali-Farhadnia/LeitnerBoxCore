@@ -102,7 +102,10 @@ func HandleFunc(db interfaces.Database, opts []wmenu.Opt) error {
 				return nil
 			})
 			PrintCard(newcard, false, false, true, false)
-			addmenu.Run()
+			err := addmenu.Run()
+			if err != nil {
+				return err
+			}
 		}
 	case 1:
 		fmt.Println("--------------------------------")
@@ -129,7 +132,10 @@ func HandleFunc(db interfaces.Database, opts []wmenu.Opt) error {
 				return nil
 			})
 
-			reviewmenu.Run()
+			err := reviewmenu.Run()
+			if err != nil {
+				return err
+			}
 
 		}
 	case -1:
@@ -181,7 +187,10 @@ func HandleReview(opt wmenu.Opt, db interfaces.Database, card *models.Card) erro
 				return nil
 			})
 			PrintCard(*card, false, true, true, false)
-			editmenu.Run()
+			err := editmenu.Run()
+			if err != nil {
+				return err
+			}
 		}
 		return nil
 	case delete:

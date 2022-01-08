@@ -1,0 +1,9 @@
+run:
+  deadline: 5m
+  tests: true
+  modules-download-mode: readonly
+
+linters:
+  enable-all: true
+  disable:
+    
