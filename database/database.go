@@ -17,7 +17,7 @@ Initialized and exposed through GetDB().*/
 var clientInstance *sql.DB
 
 //Used during creation of singleton client object in GetDB().
-var clientInstanceError error
+var errClientInstance error
 
 //Used to execute client creation procedure only once.
 var DbOnce sync.Once
@@ -26,13 +26,13 @@ func getdb() (*sql.DB, error) {
 	DbOnce.Do(func() {
 		res, err := sql.Open("sqlite3", "./database/mydb.db")
 		if err != nil {
-			clientInstanceError = err
+			errClientInstance = err
 		}
 		clientInstance = res
 
 	})
 
-	return clientInstance, clientInstanceError
+	return clientInstance, errClientInstance
 }
 
 type DB struct {

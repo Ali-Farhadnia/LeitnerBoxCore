@@ -29,9 +29,9 @@ linters:
     - revive
     - godot
     - stylecheck
-    - errname
+    #- errname
     - scopelint
     - funlen
-    #- cyclop
+    - cyclop
     #- ifshort
     #- errorlint
