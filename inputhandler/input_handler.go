@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Ali-Farhadnia/LeitnerBoxCore/database"
+	"github.com/Ali-Farhadnia/LeitnerBoxCore/interfaces"
 	"github.com/Ali-Farhadnia/LeitnerBoxCore/models"
 	"github.com/Ali-Farhadnia/LeitnerBoxCore/service"
 	"github.com/dixonwille/wmenu"
@@ -60,7 +60,7 @@ const (
 
 var err_not_complete = errors.New("not complete yet")
 
-func HandleFunc(db *database.DB, opts []wmenu.Opt) error {
+func HandleFunc(db interfaces.Database, opts []wmenu.Opt) error {
 	//review menu
 	reviewmenu := wmenu.NewMenu("Select one:")
 	reviewmenu.LoopOnInvalid()
@@ -138,7 +138,7 @@ func HandleFunc(db *database.DB, opts []wmenu.Opt) error {
 	}
 	return nil
 }
-func HandleReview(opt wmenu.Opt, db *database.DB, card *models.Card) error {
+func HandleReview(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 	reader := bufio.NewReader(os.Stdin)
 
 	//edit card menu
@@ -216,7 +216,7 @@ func HandleReview(opt wmenu.Opt, db *database.DB, card *models.Card) error {
 	}
 	return nil
 }
-func HandleEdit(opt wmenu.Opt, db *database.DB, card *models.Card) error {
+func HandleEdit(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 	reader := bufio.NewReader(os.Stdin)
 
 	switch opt.Value {
@@ -278,7 +278,7 @@ func HandleEdit(opt wmenu.Opt, db *database.DB, card *models.Card) error {
 	}
 	return nil
 }
-func HandleAdd(opt wmenu.Opt, db *database.DB, card *models.Card) error {
+func HandleAdd(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 	reader := bufio.NewReader(os.Stdin)
 	switch opt.Value {
 	case set_data:
