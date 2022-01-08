@@ -25,7 +25,7 @@ func (db *MemoryDatabase) GetCards() ([]models.Card, error) {
 	}
 	return db.Cards, nil
 }
-func (db *MemoryDatabase) FindById(id string) (models.Card, error) {
+func (db *MemoryDatabase) FindByID(id string) (models.Card, error) {
 	for _, card := range db.Cards {
 		if card.ID == id {
 			return card, nil

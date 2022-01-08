@@ -42,8 +42,8 @@ func init() {
 
 const (
 	//add options
-	set_data = 0
-	add      = 1
+	setData = 0
+	add     = 1
 	//review options
 	yes    = 0
 	no     = 1
@@ -51,14 +51,14 @@ const (
 	delete = 3
 	next   = 4
 	//edit options
-	edit_data = 0
-	edit_box  = 1
-	save      = 2
+	editData = 0
+	editBox  = 1
+	save     = 2
 	//comon options
 	cancel = -2
 )
 
-var err_not_complete = errors.New("not complete yet")
+var errNotComplete = errors.New("not complete yet")
 
 func HandleFunc(db interfaces.Database, opts []wmenu.Opt) error {
 	//review menu
@@ -74,7 +74,7 @@ func HandleFunc(db interfaces.Database, opts []wmenu.Opt) error {
 
 	//add card menu
 	addmenu := wmenu.NewMenu("Please select:")
-	addmenu.Option("set data", set_data, false, nil)
+	addmenu.Option("set data", setData, false, nil)
 	addmenu.Option("add", add, false, nil)
 	addmenu.Option("cancel", cancel, false, nil)
 	addmenu.LoopOnInvalid()
@@ -136,8 +136,8 @@ func HandleReview(opt wmenu.Opt, db interfaces.Database, card *models.Card) erro
 	editmenu := wmenu.NewMenu("select one:")
 	editmenu.LoopOnInvalid()
 	editmenu.AddColor(wlog.Cyan, wlog.BrightYellow, wlog.BrightCyan, wlog.BrightRed)
-	editmenu.Option("edit data", edit_data, false, nil)
-	editmenu.Option("edit box", edit_box, false, nil)
+	editmenu.Option("edit data", editData, false, nil)
+	editmenu.Option("edit box", editBox, false, nil)
 	editmenu.Option("save", save, false, nil)
 	editmenu.Option("cancel", cancel, false, nil)
 	switch opt.Value {
@@ -179,7 +179,7 @@ func CoHandleEdit(db interfaces.Database, editmenu wmenu.Menu, card *models.Card
 	for flag {
 		editmenu.Action(func(opts []wmenu.Opt) error {
 			err := HandleEdit(opts[0], db, card)
-			if errors.Is(err, err_not_complete) {
+			if errors.Is(err, errNotComplete) {
 				flag = true
 				return nil
 			} else if err != nil {
@@ -202,7 +202,7 @@ func HandleEdit(opt wmenu.Opt, db interfaces.Database, card *models.Card) error 
 	reader := bufio.NewReader(os.Stdin)
 
 	switch opt.Value {
-	case edit_data:
+	case editData:
 		data := ""
 		var err error
 		for {
@@ -222,9 +222,9 @@ func HandleEdit(opt wmenu.Opt, db interfaces.Database, card *models.Card) error 
 		}
 		fmt.Println(string(ColorGreen) + "Successful" + string(ColorReset))
 		card.Data = []byte(data)
-		return err_not_complete
+		return errNotComplete
 
-	case edit_box:
+	case editBox:
 		sbox := ""
 		ibox := 0
 		var err error
@@ -247,7 +247,7 @@ func HandleEdit(opt wmenu.Opt, db interfaces.Database, card *models.Card) error 
 		}
 		fmt.Println(string(ColorGreen) + "Successful" + string(ColorReset))
 		card.Box = ibox
-		return err_not_complete
+		return errNotComplete
 	case save:
 		err := service.UpdateCard(*card, db)
 		if err != nil {
@@ -268,7 +268,7 @@ func CoHandleAdd(db interfaces.Database, addmenu wmenu.Menu) error {
 	for flag {
 		addmenu.Action(func(opts []wmenu.Opt) error {
 			err := HandleAdd(opts[0], db, &newcard)
-			if errors.Is(err, err_not_complete) {
+			if errors.Is(err, errNotComplete) {
 				flag = true
 				return nil
 			} else if err != nil {
@@ -290,7 +290,7 @@ func CoHandleAdd(db interfaces.Database, addmenu wmenu.Menu) error {
 func HandleAdd(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 	reader := bufio.NewReader(os.Stdin)
 	switch opt.Value {
-	case set_data:
+	case setData:
 		data := ""
 		var err error
 		for {
@@ -310,7 +310,7 @@ func HandleAdd(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 		}
 		fmt.Println(string(ColorGreen) + "Successful" + string(ColorReset))
 		card.Data = []byte(data)
-		return err_not_complete
+		return errNotComplete
 	case add:
 		card, err := service.AddCard(card.Data, db) //To Do return card or id
 		if err != nil {
@@ -351,19 +351,19 @@ func DeleteCard(cardid string, db interfaces.Database) error {
 	}
 	return nil
 }
-func PrintCard(card models.Card, show_id, show_box, show_data, show_create_time bool) {
+func PrintCard(card models.Card, showID, showBox, showData, showCreateTime bool) {
 
 	fmt.Println(string(ColorPurple) + "**************** card ****************")
-	if show_id {
+	if showID {
 		fmt.Println("ID:", card.ID)
 	}
-	if show_box {
+	if showBox {
 		fmt.Println("Box:", card.Box)
 	}
-	if show_data {
+	if showData {
 		fmt.Println("Data:", string(card.Data))
 	}
-	if show_create_time {
+	if showCreateTime {
 		fmt.Println("Create time:", card.CreateTime)
 	}
 	fmt.Println("\n**************************************", string(ColorReset))

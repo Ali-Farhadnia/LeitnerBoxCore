@@ -28,7 +28,7 @@ linters:
     - unconvert
     - revive
     - godot
-    - stylecheck
+    #- stylecheck
     #- errname
     - scopelint
     - funlen

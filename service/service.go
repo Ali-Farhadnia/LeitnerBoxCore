@@ -34,7 +34,7 @@ func Review(database interfaces.Database) ([]models.Card, error) {
 	return wantedcarts, nil
 }
 func ConfirmTheCard(id string, database interfaces.Database) error {
-	cart, err := database.FindById(id)
+	cart, err := database.FindByID(id)
 
 	if err != nil {
 		return err
@@ -48,7 +48,7 @@ func ConfirmTheCard(id string, database interfaces.Database) error {
 	return nil
 }
 func RejectTheCard(id string, database interfaces.Database) error {
-	cart, err := database.FindById(id)
+	cart, err := database.FindByID(id)
 	if err != nil {
 		return err
 	}

@@ -19,11 +19,11 @@ var clientInstance *sql.DB
 //Used during creation of singleton client object in GetDB().
 var errClientInstance error
 
-//Used to execute client creation procedure only once.
-var DbOnce sync.Once
+//DBOnce used to execute client creation procedure only once.
+var DBOnce sync.Once
 
 func getdb() (*sql.DB, error) {
-	DbOnce.Do(func() {
+	DBOnce.Do(func() {
 		res, err := sql.Open("sqlite3", "./database/mydb.db")
 		if err != nil {
 			errClientInstance = err
@@ -175,7 +175,7 @@ func (db *DB) GetCards() ([]models.Card, error) {
 	return cards, nil
 }
 
-func (db *DB) FindById(id string) (models.Card, error) {
+func (db *DB) FindByID(id string) (models.Card, error) {
 	if err := db.checkconnection(); err != nil {
 		return models.Card{}, err
 	}
