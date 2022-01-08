@@ -32,6 +32,6 @@ linters:
     - errname
     - scopelint
     - funlen
-    - cyclop
+    #- cyclop
     #- ifshort
     #- errorlint

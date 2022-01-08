@@ -83,60 +83,14 @@ func HandleFunc(db interfaces.Database, opts []wmenu.Opt) error {
 	//handle input
 	switch opts[0].Value {
 	case 0:
-		fmt.Println("--------------------------------")
-		defer fmt.Println("--------------------------------")
-		newcard := models.Card{}
-		flag := true
-		for flag {
-			addmenu.Action(func(opts []wmenu.Opt) error {
-				err := HandleAdd(opts[0], db, &newcard)
-				if errors.Is(err, err_not_complete) {
-					flag = true
-					return nil
-				} else if err != nil {
-					fmt.Println(string(ColorRed) + err.Error() + string(ColorReset))
-					flag = false
-					return err
-				}
-				flag = false
-				return nil
-			})
-			PrintCard(newcard, false, false, true, false)
-			err := addmenu.Run()
-			if err != nil {
-				return err
-			}
-		}
-	case 1:
-		fmt.Println("--------------------------------")
-		defer fmt.Println("--------------------------------")
-		carts, err := service.Review(db)
+		err := CoHandleAdd(db, *addmenu)
 		if err != nil {
-			fmt.Println(string(ColorRed) + err.Error() + string(ColorReset))
 			return err
 		}
-		if len(carts) == 0 {
-			fmt.Println(string(ColorRed) + "nothings to review" + string(ColorReset))
-			return errors.New("nothings to review")
-		}
-		for _, card := range carts {
-			fmt.Println("in review loop")
-			fmt.Println(card)
-			PrintCard(card, true, true, true, true)
-			reviewmenu.Action(func(opts []wmenu.Opt) error {
-				err := HandleReview(opts[0], db, &card)
-				if err != nil {
-					fmt.Println(string(ColorRed) + err.Error() + string(ColorReset))
-					return err
-				}
-				return nil
-			})
-
-			err := reviewmenu.Run()
-			if err != nil {
-				return err
-			}
-
+	case 1:
+		err := CoHandleReview(db, *reviewmenu)
+		if err != nil {
+			return err
 		}
 	case -1:
 		fmt.Println("Goodby")
@@ -144,9 +98,40 @@ func HandleFunc(db interfaces.Database, opts []wmenu.Opt) error {
 	}
 	return nil
 }
-func HandleReview(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
-	reader := bufio.NewReader(os.Stdin)
+func CoHandleReview(db interfaces.Database, reviewmenu wmenu.Menu) error {
+	fmt.Println("--------------------------------")
+	defer fmt.Println("--------------------------------")
+	carts, err := service.Review(db)
+	if err != nil {
+		fmt.Println(string(ColorRed) + err.Error() + string(ColorReset))
+		return err
+	}
+	if len(carts) == 0 {
+		fmt.Println(string(ColorRed) + "nothings to review" + string(ColorReset))
+		return errors.New("nothings to review")
+	}
+	for _, card := range carts {
+		fmt.Println("in review loop")
+		fmt.Println(card)
+		PrintCard(card, true, true, true, true)
+		reviewmenu.Action(func(opts []wmenu.Opt) error {
+			err := HandleReview(opts[0], db, &card)
+			if err != nil {
+				fmt.Println(string(ColorRed) + err.Error() + string(ColorReset))
+				return err
+			}
+			return nil
+		})
 
+		err := reviewmenu.Run()
+		if err != nil {
+			return err
+		}
+
+	}
+	return nil
+}
+func HandleReview(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 	//edit card menu
 	editmenu := wmenu.NewMenu("select one:")
 	editmenu.LoopOnInvalid()
@@ -169,50 +154,12 @@ func HandleReview(opt wmenu.Opt, db interfaces.Database, card *models.Card) erro
 		fmt.Println(string(ColorGreen) + "Successful" + string(ColorReset))
 		return nil
 	case edit:
-		fmt.Println("--------------------------------")
-		defer fmt.Println("--------------------------------")
-		flag := true
-		for flag {
-			editmenu.Action(func(opts []wmenu.Opt) error {
-				err := HandleEdit(opts[0], db, card)
-				if errors.Is(err, err_not_complete) {
-					flag = true
-					return nil
-				} else if err != nil {
-					fmt.Println(string(ColorRed) + err.Error() + string(ColorReset))
-					flag = false
-					return err
-				}
-				flag = false
-				return nil
-			})
-			PrintCard(*card, false, true, true, false)
-			err := editmenu.Run()
-			if err != nil {
-				return err
-			}
+		err := CoHandleEdit(db, *editmenu, card)
+		if err != nil {
+			return err
 		}
-		return nil
 	case delete:
-		input := ""
-		var err error
-		for {
-			fmt.Print("Are you sure(yes or no)?")
-			input, err = reader.ReadString('\n')
-			if err != nil {
-				return err
-			}
-			input = strings.TrimSuffix(input, "\n")
-			input = strings.TrimSuffix(input, "\r")
-			if input == "yes" {
-				break
-			} else if input == "no" {
-				return nil
-			} else {
-				fmt.Println(string(ColorRed) + "unvalid input" + string(ColorReset))
-			}
-		}
-		err = service.DeleteCard(card.ID, db)
+		err := DeleteCard(card.ID, db)
 		if err != nil {
 			return err
 		}
@@ -222,6 +169,32 @@ func HandleReview(opt wmenu.Opt, db interfaces.Database, card *models.Card) erro
 		return nil
 	case cancel:
 		return nil
+	}
+	return nil
+}
+func CoHandleEdit(db interfaces.Database, editmenu wmenu.Menu, card *models.Card) error {
+	fmt.Println("--------------------------------")
+	defer fmt.Println("--------------------------------")
+	flag := true
+	for flag {
+		editmenu.Action(func(opts []wmenu.Opt) error {
+			err := HandleEdit(opts[0], db, card)
+			if errors.Is(err, err_not_complete) {
+				flag = true
+				return nil
+			} else if err != nil {
+				fmt.Println(string(ColorRed) + err.Error() + string(ColorReset))
+				flag = false
+				return err
+			}
+			flag = false
+			return nil
+		})
+		PrintCard(*card, false, true, true, false)
+		err := editmenu.Run()
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -287,6 +260,33 @@ func HandleEdit(opt wmenu.Opt, db interfaces.Database, card *models.Card) error 
 	}
 	return nil
 }
+func CoHandleAdd(db interfaces.Database, addmenu wmenu.Menu) error {
+	fmt.Println("--------------------------------")
+	defer fmt.Println("--------------------------------")
+	newcard := models.Card{}
+	flag := true
+	for flag {
+		addmenu.Action(func(opts []wmenu.Opt) error {
+			err := HandleAdd(opts[0], db, &newcard)
+			if errors.Is(err, err_not_complete) {
+				flag = true
+				return nil
+			} else if err != nil {
+				fmt.Println(string(ColorRed) + err.Error() + string(ColorReset))
+				flag = false
+				return err
+			}
+			flag = false
+			return nil
+		})
+		PrintCard(newcard, false, false, true, false)
+		err := addmenu.Run()
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
 func HandleAdd(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 	reader := bufio.NewReader(os.Stdin)
 	switch opt.Value {
@@ -324,7 +324,35 @@ func HandleAdd(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 	}
 	return nil
 }
+func DeleteCard(cardid string, db interfaces.Database) error {
+	reader := bufio.NewReader(os.Stdin)
+
+	input := ""
+	var err error
+	for {
+		fmt.Print("Are you sure(yes or no)?")
+		input, err = reader.ReadString('\n')
+		if err != nil {
+			return err
+		}
+		input = strings.TrimSuffix(input, "\n")
+		input = strings.TrimSuffix(input, "\r")
+		if input == "yes" {
+			break
+		} else if input == "no" {
+			return nil
+		} else {
+			fmt.Println(string(ColorRed) + "unvalid input" + string(ColorReset))
+		}
+	}
+	err = service.DeleteCard(cardid, db)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 func PrintCard(card models.Card, show_id, show_box, show_data, show_create_time bool) {
+
 	fmt.Println(string(ColorPurple) + "**************** card ****************")
 	if show_id {
 		fmt.Println("ID:", card.ID)
