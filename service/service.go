@@ -8,7 +8,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-// AddCard() create card with given data and time.now() adn add it to database and return it.
+// AddCard() create card with given data and time.now() and add it to database and return it.
 func AddCard(data []byte, database interfaces.Database) (models.Card, error) {
 	id := uuid.NewV4().String()
 	now := time.Now() //.UTC()
