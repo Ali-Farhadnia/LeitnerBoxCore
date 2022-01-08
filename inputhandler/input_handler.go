@@ -90,7 +90,7 @@ func HandleFunc(db interfaces.Database, opts []wmenu.Opt) error {
 		for flag {
 			addmenu.Action(func(opts []wmenu.Opt) error {
 				err := HandleAdd(opts[0], db, &newcard)
-				if err == err_not_complete {
+				if errors.Is(err, err_not_complete) {
 					flag = true
 					return nil
 				} else if err != nil {
@@ -175,7 +175,7 @@ func HandleReview(opt wmenu.Opt, db interfaces.Database, card *models.Card) erro
 		for flag {
 			editmenu.Action(func(opts []wmenu.Opt) error {
 				err := HandleEdit(opts[0], db, card)
-				if err == err_not_complete {
+				if errors.Is(err, err_not_complete) {
 					flag = true
 					return nil
 				} else if err != nil {
