@@ -16,7 +16,7 @@ import (
 	"gopkg.in/dixonwille/wlog.v2"
 )
 
-// Colors
+// Colors.
 var (
 	ColorReset  = "\033[0m"
 	ColorRed    = "\033[31m"
@@ -43,27 +43,27 @@ func init() {
 }
 
 const (
-	//add options
+	// add options.
 	setData = 0
 	add     = 1
-	//review options
+	// review options.
 	yes    = 0
 	no     = 1
 	edit   = 2
 	delete = 3
 	next   = 4
-	//edit options
+	// edit options.
 	editData = 0
 	editBox  = 1
 	save     = 2
-	//comon options
+	// comon options.
 	cancel = -2
 )
 
 // errNotComplete is error that Used to announce that the program is not finished.
 var errNotComplete = errors.New("not complete yet")
 
-//HandleFunc main input handler
+// HandleFunc main input handler.
 func HandleFunc(db interfaces.Database, opts []wmenu.Opt) error {
 	//review menu
 	reviewmenu := wmenu.NewMenu("Select one:")
