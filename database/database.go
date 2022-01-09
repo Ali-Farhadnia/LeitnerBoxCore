@@ -186,17 +186,11 @@ func (db *DB) FindByID(id string) (models.Card, error) {
 	if err != nil {
 		return models.Card{}, err
 	}
-	var t string
+	err = row.Scan(&card.ID, &card.Box, &card.Data, &card.CreateTime)
+	if err != nil {
+		return models.Card{}, err
+	}
 
-	err = row.Scan(&card.ID, &card.Box, &card.Data, &t)
-	if err != nil {
-		return models.Card{}, err
-	}
-	ti, err := time.Parse("2006-01-02 03:04:05+06:00", t)
-	if err != nil {
-		return models.Card{}, err
-	}
-	card.CreateTime = &ti
 	return card, nil
 }
 
@@ -206,7 +200,7 @@ func (db *DB) UpdateCard(card models.Card) error {
 	if err := db.checkconnection(); err != nil {
 		return err
 	}
-	stmt, err := db.client.Prepare("UPDATE card SET box = ?, data = ?, createtime = ? where id = ?")
+	stmt, err := db.client.Prepare("UPDATE card set box = ?, data = ?, createtime = ? where id = ?")
 	if err != nil {
 		return err
 	}

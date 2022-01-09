@@ -107,11 +107,11 @@ func CoHandleReview(db interfaces.Database, reviewmenu wmenu.Menu) error {
 	defer fmt.Println("--------------------------------")
 	carts, err := service.Review(db)
 	if err != nil {
-		fmt.Println(string(ColorRed) + err.Error() + string(ColorReset))
+		fmt.Println(ColorRed + err.Error() + ColorReset)
 		return err
 	}
 	if len(carts) == 0 {
-		fmt.Println(string(ColorRed) + "nothings to review" + string(ColorReset))
+		fmt.Println(ColorRed + "nothings to review" + ColorReset)
 		return errors.New("nothings to review")
 	}
 	for _, card := range carts {
@@ -121,7 +121,7 @@ func CoHandleReview(db interfaces.Database, reviewmenu wmenu.Menu) error {
 		reviewmenu.Action(func(opts []wmenu.Opt) error {
 			err := HandleReview(opts[0], db, &card)
 			if err != nil {
-				fmt.Println(string(ColorRed) + err.Error() + string(ColorReset))
+				fmt.Println(ColorRed + err.Error() + ColorReset)
 				return err
 			}
 			return nil
@@ -149,13 +149,13 @@ func HandleReview(opt wmenu.Opt, db interfaces.Database, card *models.Card) erro
 		if err := service.ConfirmTheCard(card.ID, db); err != nil {
 			return err
 		}
-		fmt.Println(string(ColorGreen) + "Successful" + string(ColorReset))
+		fmt.Println(ColorGreen + "Successful" + ColorReset)
 		return nil
 	case no:
 		if err := service.RejectTheCard(card.ID, db); err != nil {
 			return err
 		}
-		fmt.Println(string(ColorGreen) + "Successful" + string(ColorReset))
+		fmt.Println(ColorGreen + "Successful" + ColorReset)
 		return nil
 	case edit:
 		err := CoHandleEdit(db, *editmenu, card)
@@ -167,7 +167,7 @@ func HandleReview(opt wmenu.Opt, db interfaces.Database, card *models.Card) erro
 		if err != nil {
 			return err
 		}
-		fmt.Println(string(ColorGreen) + "Successful" + string(ColorReset))
+		fmt.Println(ColorGreen + "Successful" + ColorReset)
 		return nil
 	case next:
 		return nil
@@ -187,7 +187,7 @@ func CoHandleEdit(db interfaces.Database, editmenu wmenu.Menu, card *models.Card
 				flag = true
 				return nil
 			} else if err != nil {
-				fmt.Println(string(ColorRed) + err.Error() + string(ColorReset))
+				fmt.Println(ColorRed + err.Error() + ColorReset)
 				flag = false
 				return err
 			}
@@ -218,13 +218,13 @@ func HandleEdit(opt wmenu.Opt, db interfaces.Database, card *models.Card) error 
 			data = strings.TrimSuffix(data, "\n")
 			data = strings.TrimSuffix(data, "\r")
 			if data == "" {
-				fmt.Println(string(ColorRed) + "unvalid input" + string(ColorReset))
+				fmt.Println(ColorRed + "unvalid input" + ColorReset)
 				continue
 			} else {
 				break
 			}
 		}
-		fmt.Println(string(ColorGreen) + "Successful" + string(ColorReset))
+		fmt.Println(ColorGreen + "Successful" + ColorReset)
 		card.Data = []byte(data)
 		return errNotComplete
 
@@ -242,14 +242,14 @@ func HandleEdit(opt wmenu.Opt, db interfaces.Database, card *models.Card) error 
 			sbox = strings.TrimSuffix(sbox, "\r")
 			i, err := strconv.Atoi(sbox)
 			if err != nil {
-				fmt.Println(string(ColorRed) + "unvalid input" + string(ColorReset))
+				fmt.Println(ColorRed + "unvalid input" + ColorReset)
 				continue
 			} else {
 				ibox = i
 				break
 			}
 		}
-		fmt.Println(string(ColorGreen) + "Successful" + string(ColorReset))
+		fmt.Println(ColorGreen + "Successful" + ColorReset)
 		card.Box = ibox
 		return errNotComplete
 	case save:
@@ -257,7 +257,7 @@ func HandleEdit(opt wmenu.Opt, db interfaces.Database, card *models.Card) error 
 		if err != nil {
 			return err
 		}
-		fmt.Println(string(ColorGreen) + "Successful" + string(ColorReset))
+		fmt.Println(ColorGreen + "Successful" + ColorReset)
 		return nil
 	case cancel:
 		return nil
@@ -276,7 +276,7 @@ func CoHandleAdd(db interfaces.Database, addmenu wmenu.Menu) error {
 				flag = true
 				return nil
 			} else if err != nil {
-				fmt.Println(string(ColorRed) + err.Error() + string(ColorReset))
+				fmt.Println(ColorRed + err.Error() + ColorReset)
 				flag = false
 				return err
 			}
@@ -306,13 +306,13 @@ func HandleAdd(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 			data = strings.TrimSuffix(data, "\n")
 			data = strings.TrimSuffix(data, "\r")
 			if data == "" {
-				fmt.Println(string(ColorRed) + "unvalid input" + string(ColorReset))
+				fmt.Println(ColorRed + "unvalid input" + ColorReset)
 				continue
 			} else {
 				break
 			}
 		}
-		fmt.Println(string(ColorGreen) + "Successful" + string(ColorReset))
+		fmt.Println(ColorGreen + "Successful" + ColorReset)
 		card.Data = []byte(data)
 		return errNotComplete
 	case add:
@@ -321,7 +321,7 @@ func HandleAdd(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 			return err
 		}
 		PrintCard(card, true, true, true, true)
-		fmt.Println(string(ColorGreen) + "Successful" + string(ColorReset))
+		fmt.Println(ColorGreen + "Successful" + ColorReset)
 		return nil
 	case cancel:
 		return nil
@@ -346,7 +346,7 @@ func DeleteCard(cardid string, db interfaces.Database) error {
 		} else if input == "no" {
 			return nil
 		} else {
-			fmt.Println(string(ColorRed) + "unvalid input" + string(ColorReset))
+			fmt.Println(ColorRed + "unvalid input" + ColorReset)
 		}
 	}
 	err = service.DeleteCard(cardid, db)
@@ -357,7 +357,7 @@ func DeleteCard(cardid string, db interfaces.Database) error {
 }
 func PrintCard(card models.Card, showID, showBox, showData, showCreateTime bool) {
 
-	fmt.Println(string(ColorPurple) + "**************** card ****************")
+	fmt.Println(ColorPurple + "**************** card ****************")
 	if showID {
 		fmt.Println("ID:", card.ID)
 	}
@@ -365,10 +365,10 @@ func PrintCard(card models.Card, showID, showBox, showData, showCreateTime bool)
 		fmt.Println("Box:", card.Box)
 	}
 	if showData {
-		fmt.Println("Data:", string(card.Data))
+		fmt.Println("Data:", card.Data)
 	}
 	if showCreateTime {
 		fmt.Println("Create time:", card.CreateTime)
 	}
-	fmt.Println("\n**************************************", string(ColorReset))
+	fmt.Println("\n**************************************", ColorReset)
 }

@@ -22,9 +22,9 @@ linters:
     - varnamelen
     - paralleltest
     - exhaustivestruct
-    - unconvert
-    - revive
+    # - unconvert
     # - godot
+    - revive
     - golint
     - scopelint
     - funlen
