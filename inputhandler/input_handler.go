@@ -207,7 +207,7 @@ func HandleEdit(opt wmenu.Opt, db interfaces.Database, card *models.Card) error 
 
 	switch opt.Value {
 	case editData:
-		data := ""
+		var data string
 		var err error
 		for {
 			fmt.Print("Data :")
@@ -229,8 +229,8 @@ func HandleEdit(opt wmenu.Opt, db interfaces.Database, card *models.Card) error 
 		return errNotComplete
 
 	case editBox:
-		sbox := ""
-		ibox := 0
+		var sbox string
+		var ibox int
 		var err error
 		for {
 			fmt.Print("Box :")
@@ -295,7 +295,7 @@ func HandleAdd(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 	reader := bufio.NewReader(os.Stdin)
 	switch opt.Value {
 	case setData:
-		data := ""
+		var data string
 		var err error
 		for {
 			fmt.Print("Data :")
@@ -331,7 +331,7 @@ func HandleAdd(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 func DeleteCard(cardid string, db interfaces.Database) error {
 	reader := bufio.NewReader(os.Stdin)
 
-	input := ""
+	var input string
 	var err error
 	for {
 		fmt.Print("Are you sure(yes or no)?")

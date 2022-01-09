@@ -18,12 +18,12 @@ linters:
     - goerr113
     - nlreturn
     - predeclared
-    - wastedassign
-    - varnamelen
+    # - wastedassign
     # - paralleltest
     # - exhaustivestruct
     # - unconvert
     # - godot
+    - varnamelen
     - revive
     - golint
     - scopelint
