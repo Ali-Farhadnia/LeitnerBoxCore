@@ -20,7 +20,7 @@ linters:
     - predeclared
     - wastedassign
     - varnamelen
-    - paralleltest
+    # - paralleltest
     # - exhaustivestruct
     # - unconvert
     # - godot

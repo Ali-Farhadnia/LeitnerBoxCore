@@ -10,19 +10,23 @@ import (
 )
 
 func TestAddCard(t *testing.T) {
+	t.Parallel()
 	db := memorydatabase.MemoryDatabase{Cards: make([]models.Card, 0)}
 	t.Run("Successful", func(t *testing.T) {
+		t.Parallel()
 		_, err := service.AddCard([]byte("hi"), &db)
 		assert.NoError(t, err)
 	})
 	t.Run("Error", func(t *testing.T) {
+		t.Parallel()
 		_, err := service.AddCard([]byte("error"), &db)
 		assert.EqualError(t, err, "add card error")
 	})
-
 }
 func TestReview(t *testing.T) {
+	t.Parallel()
 	t.Run("Successful", func(t *testing.T) {
+		t.Parallel()
 		db := memorydatabase.MemoryDatabase{Cards: make([]models.Card, 0)}
 		_, err := service.AddCard([]byte("hi"), &db)
 		assert.NoError(t, err)
@@ -32,6 +36,7 @@ func TestReview(t *testing.T) {
 	})
 
 	t.Run("Error", func(t *testing.T) {
+		t.Parallel()
 		db := memorydatabase.MemoryDatabase{Cards: make([]models.Card, 0)}
 		_, err := service.AddCard([]byte("getCards error"), &db)
 		assert.NoError(t, err)
@@ -39,9 +44,10 @@ func TestReview(t *testing.T) {
 		assert.EqualError(t, err, "getCards error")
 	})
 }
-
 func TestConfirmTheCard(t *testing.T) {
+	t.Parallel()
 	t.Run("Successful", func(t *testing.T) {
+		t.Parallel()
 		db := memorydatabase.MemoryDatabase{Cards: make([]models.Card, 0)}
 		card1, err := service.AddCard([]byte("hi"), &db)
 		assert.NoError(t, err)
@@ -52,6 +58,7 @@ func TestConfirmTheCard(t *testing.T) {
 	})
 
 	t.Run("Wrong id", func(t *testing.T) {
+		t.Parallel()
 		db := memorydatabase.MemoryDatabase{Cards: make([]models.Card, 0)}
 		_, err := service.AddCard([]byte("hi"), &db)
 		assert.NoError(t, err)
@@ -59,17 +66,18 @@ func TestConfirmTheCard(t *testing.T) {
 		assert.EqualError(t, err, "nothings fount")
 	})
 	t.Run("Updatecard error", func(t *testing.T) {
+		t.Parallel()
 		db := memorydatabase.MemoryDatabase{Cards: make([]models.Card, 0)}
 		card, err := service.AddCard([]byte("updatecard error"), &db)
 		assert.NoError(t, err)
 		err = service.ConfirmTheCard(card.ID, &db)
 		assert.EqualError(t, err, "updatecard error")
 	})
-
 }
-
 func TestRejectTheCard(t *testing.T) {
+	t.Parallel()
 	t.Run("Successful", func(t *testing.T) {
+		t.Parallel()
 		db := memorydatabase.MemoryDatabase{Cards: make([]models.Card, 0)}
 		card1, err := service.AddCard([]byte("hi"), &db)
 		assert.NoError(t, err)
@@ -80,6 +88,7 @@ func TestRejectTheCard(t *testing.T) {
 	})
 
 	t.Run("Wrong id", func(t *testing.T) {
+		t.Parallel()
 		db := memorydatabase.MemoryDatabase{Cards: make([]models.Card, 0)}
 		_, err := service.AddCard([]byte("hi"), &db)
 		assert.NoError(t, err)
@@ -87,16 +96,18 @@ func TestRejectTheCard(t *testing.T) {
 		assert.EqualError(t, err, "nothings fount")
 	})
 	t.Run("Updatecard error", func(t *testing.T) {
+		t.Parallel()
 		db := memorydatabase.MemoryDatabase{Cards: make([]models.Card, 0)}
 		card, err := service.AddCard([]byte("updatecard error"), &db)
 		assert.NoError(t, err)
 		err = service.RejectTheCard(card.ID, &db)
 		assert.EqualError(t, err, "updatecard error")
 	})
-
 }
 func TestUpdateCard(t *testing.T) {
+	t.Parallel()
 	t.Run("Successful", func(t *testing.T) {
+		t.Parallel()
 		db := memorydatabase.MemoryDatabase{Cards: make([]models.Card, 0)}
 		card1, err := service.AddCard([]byte("hi"), &db)
 		assert.NoError(t, err)
@@ -109,6 +120,7 @@ func TestUpdateCard(t *testing.T) {
 
 	})
 	t.Run("Updatecard error", func(t *testing.T) {
+		t.Parallel()
 		db := memorydatabase.MemoryDatabase{Cards: make([]models.Card, 0)}
 		card, err := service.AddCard([]byte("updatecard error"), &db)
 		assert.NoError(t, err)
@@ -117,7 +129,9 @@ func TestUpdateCard(t *testing.T) {
 	})
 }
 func TestDeleteCard(t *testing.T) {
+	t.Parallel()
 	t.Run("Successful", func(t *testing.T) {
+		t.Parallel()
 		db := memorydatabase.MemoryDatabase{Cards: make([]models.Card, 0)}
 		card1, err := service.AddCard([]byte("hi"), &db)
 		assert.NoError(t, err)
@@ -128,11 +142,11 @@ func TestDeleteCard(t *testing.T) {
 	})
 
 	t.Run("deletecard error", func(t *testing.T) {
+		t.Parallel()
 		db := memorydatabase.MemoryDatabase{Cards: make([]models.Card, 0)}
 		_, err := service.AddCard([]byte("hi"), &db)
 		assert.NoError(t, err)
 		err = service.DeleteCard("deletecard error", &db)
 		assert.EqualError(t, err, "deletecard error")
 	})
-
 }
