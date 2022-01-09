@@ -21,7 +21,7 @@ var errClientInstance error
 //DBOnce used to execute client creation procedure only once.
 var DBOnce sync.Once
 
-// getdb() create sqlite database client from ./database/mydb.db.
+// getdb create sqlite database client from ./database/mydb.db.
 func getdb() (*sql.DB, error) {
 	DBOnce.Do(func() {
 		res, err := sql.Open("sqlite3", "./database/mydb.db")
@@ -54,7 +54,7 @@ func NewDB() (*DB, error) {
 	return &rdb, nil
 }
 
-// checkConnection() ping database client and if not response trys to build new one.
+// checkConnection ping database client and if not response trys to build new one.
 func (db *DB) checkConnection() error {
 	err := db.client.Ping()
 	if err != nil {
@@ -67,7 +67,7 @@ func (db *DB) checkConnection() error {
 	return nil
 }
 
-// createCardTable() check if card table exist or not and if not creates one.
+// createCardTable check if card table exist or not and if not creates one.
 func (db *DB) createCardTable() error {
 	if err := db.checkConnection(); err != nil {
 		return err
@@ -111,7 +111,7 @@ func (db *DB) createCardTable() error {
 	return nil
 }
 
-// AddNewCard() get card and add it to database.
+// AddNewCard get card and add it to database.
 func (db *DB) AddNewCard(card models.Card) error {
 	if err := db.checkConnection(); err != nil {
 		return err
@@ -133,7 +133,7 @@ func (db *DB) AddNewCard(card models.Card) error {
 	return nil
 }
 
-// GetCards() query all cards from database and return them.
+// GetCards query all cards from database and return them.
 func (db *DB) GetCards() ([]models.Card, error) {
 	if err := db.checkConnection(); err != nil {
 		return nil, err
@@ -174,7 +174,7 @@ func (db *DB) GetCards() ([]models.Card, error) {
 	return cards, nil
 }
 
-// FindByID() get card d and find it in the database and return it.
+// FindByID get card d and find it in the database and return it.
 func (db *DB) FindByID(id string) (models.Card, error) {
 	if err := db.checkConnection(); err != nil {
 		return *models.NewCard(), err
@@ -194,7 +194,7 @@ func (db *DB) FindByID(id string) (models.Card, error) {
 	return card, nil
 }
 
-// UpdateCard() get card and update it in database.
+// UpdateCard get card and update it in database.
 func (db *DB) UpdateCard(card models.Card) error {
 	//fmt.Println("--------in update")
 	//defer fmt.Println("--------in update")
@@ -221,7 +221,7 @@ func (db *DB) UpdateCard(card models.Card) error {
 	return nil
 }
 
-// DeleteCard() get card id and remove it from database.
+// DeleteCard get card id and remove it from database.
 func (db *DB) DeleteCard(id string) error {
 	if err := db.checkConnection(); err != nil {
 		return err
