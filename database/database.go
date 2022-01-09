@@ -21,6 +21,7 @@ var errClientInstance error
 //DBOnce used to execute client creation procedure only once.
 var DBOnce sync.Once
 
+// getdb() create sqlite database client from ./database/mydb.db.
 func getdb() (*sql.DB, error) {
 	DBOnce.Do(func() {
 		res, err := sql.Open("sqlite3", "./database/mydb.db")
@@ -34,24 +35,27 @@ func getdb() (*sql.DB, error) {
 	return clientInstance, errClientInstance
 }
 
+// DB is database type that implement database interface.
 type DB struct {
 	client *sql.DB
 }
 
+// NewDB create new DB struct.
 func NewDB() (*DB, error) {
 	db, err := getdb()
 	if err != nil {
 		return nil, err
 	}
 	rdb := DB{client: db}
-	err = rdb.createbooktable()
+	err = rdb.createCardTable()
 	if err != nil {
 		return nil, err
 	}
 	return &rdb, nil
 }
 
-func (db *DB) checkconnection() error {
+// checkConnection() ping database client and if not response trys to build new one.
+func (db *DB) checkConnection() error {
 	err := db.client.Ping()
 	if err != nil {
 		res, err := getdb()
@@ -63,8 +67,9 @@ func (db *DB) checkconnection() error {
 	return nil
 }
 
-func (db *DB) createbooktable() error {
-	if err := db.checkconnection(); err != nil {
+// createCardTable() check if card table exist or not and if not creates one.
+func (db *DB) createCardTable() error {
+	if err := db.checkConnection(); err != nil {
 		return err
 	}
 
@@ -106,8 +111,9 @@ func (db *DB) createbooktable() error {
 	return nil
 }
 
+// AddNewCard() get card and add it to database.
 func (db *DB) AddNewCard(card models.Card) error {
-	if err := db.checkconnection(); err != nil {
+	if err := db.checkConnection(); err != nil {
 		return err
 	}
 	sqlStatement := `INSERT INTO card (id, box, data, createtime) VALUES ($1,$2,$3,$4)`
@@ -115,14 +121,7 @@ func (db *DB) AddNewCard(card models.Card) error {
 	if err != nil {
 		return err
 	}
-	/*
-		fmt.Println("---------------------------")
-		fmt.Println("id:", card.ID)
-		fmt.Println("Box:", card.Box)
-		fmt.Println("Data:", card.Data)
-		fmt.Println("CreateTime:", card.CreateTime)
-		fmt.Println("---------------------------")
-	*/
+
 	affected, err := res.RowsAffected()
 	if err != nil {
 		return err
@@ -134,8 +133,9 @@ func (db *DB) AddNewCard(card models.Card) error {
 	return nil
 }
 
+// GetCards() query all cards from database and return them.
 func (db *DB) GetCards() ([]models.Card, error) {
-	if err := db.checkconnection(); err != nil {
+	if err := db.checkConnection(); err != nil {
 		return nil, err
 	}
 	sqlStatement := `SELECT * FROM card;`
@@ -174,8 +174,9 @@ func (db *DB) GetCards() ([]models.Card, error) {
 	return cards, nil
 }
 
+// FindByID() get card d and find it in the database and return it.
 func (db *DB) FindByID(id string) (models.Card, error) {
-	if err := db.checkconnection(); err != nil {
+	if err := db.checkConnection(); err != nil {
 		return *models.NewCard(), err
 	}
 	var card models.Card
@@ -193,10 +194,11 @@ func (db *DB) FindByID(id string) (models.Card, error) {
 	return card, nil
 }
 
+// UpdateCard() get card and update it in database.
 func (db *DB) UpdateCard(card models.Card) error {
 	//fmt.Println("--------in update")
 	//defer fmt.Println("--------in update")
-	if err := db.checkconnection(); err != nil {
+	if err := db.checkConnection(); err != nil {
 		return err
 	}
 	stmt, err := db.client.Prepare("UPDATE card set box = ?, data = ?, createtime = ? where id = ?")
@@ -218,8 +220,10 @@ func (db *DB) UpdateCard(card models.Card) error {
 	}
 	return nil
 }
+
+// DeleteCard() get card id and remove it from database.
 func (db *DB) DeleteCard(id string) error {
-	if err := db.checkconnection(); err != nil {
+	if err := db.checkConnection(); err != nil {
 		return err
 	}
 	stmt, err := db.client.Prepare("DELETE FROM card where id = ?")

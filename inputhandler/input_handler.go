@@ -102,6 +102,8 @@ func HandleFunc(db interfaces.Database, opts []wmenu.Opt) error {
 	}
 	return nil
 }
+
+// CoHandleReview() run HandleReview() in proper way.
 func CoHandleReview(db interfaces.Database, reviewmenu wmenu.Menu) error {
 	fmt.Println("--------------------------------")
 	defer fmt.Println("--------------------------------")
@@ -135,6 +137,8 @@ func CoHandleReview(db interfaces.Database, reviewmenu wmenu.Menu) error {
 	}
 	return nil
 }
+
+// HandleReview() handle review menu.
 func HandleReview(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 	//edit card menu
 	editmenu := wmenu.NewMenu("select one:")
@@ -176,6 +180,8 @@ func HandleReview(opt wmenu.Opt, db interfaces.Database, card *models.Card) erro
 	}
 	return nil
 }
+
+// CoHandleEdit() run HandleEdit() in proper way.
 func CoHandleEdit(db interfaces.Database, editmenu wmenu.Menu, card *models.Card) error {
 	fmt.Println("--------------------------------")
 	defer fmt.Println("--------------------------------")
@@ -202,6 +208,8 @@ func CoHandleEdit(db interfaces.Database, editmenu wmenu.Menu, card *models.Card
 	}
 	return nil
 }
+
+// HandleEdit() handle edit menu.
 func HandleEdit(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 	reader := bufio.NewReader(os.Stdin)
 
@@ -264,6 +272,8 @@ func HandleEdit(opt wmenu.Opt, db interfaces.Database, card *models.Card) error 
 	}
 	return nil
 }
+
+// CoHandleAdd() run HandleAdd() in proper way.
 func CoHandleAdd(db interfaces.Database, addmenu wmenu.Menu) error {
 	fmt.Println("--------------------------------")
 	defer fmt.Println("--------------------------------")
@@ -291,6 +301,8 @@ func CoHandleAdd(db interfaces.Database, addmenu wmenu.Menu) error {
 	}
 	return nil
 }
+
+// HandleAdd() handle add menu.
 func HandleAdd(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 	reader := bufio.NewReader(os.Stdin)
 	switch opt.Value {
@@ -328,6 +340,8 @@ func HandleAdd(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 	}
 	return nil
 }
+
+// DeleteCard() handle delete option.
 func DeleteCard(cardid string, db interfaces.Database) error {
 	reader := bufio.NewReader(os.Stdin)
 
@@ -355,6 +369,8 @@ func DeleteCard(cardid string, db interfaces.Database) error {
 	}
 	return nil
 }
+
+// PrintCard() print card to stdout.
 func PrintCard(card models.Card, showID, showBox, showData, showCreateTime bool) {
 
 	fmt.Println(ColorPurple + "**************** card ****************")
