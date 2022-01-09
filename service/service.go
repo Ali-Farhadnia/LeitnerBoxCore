@@ -11,13 +11,17 @@ import (
 // AddCard() create card with given data and time.now() and add it to database and return it.
 func AddCard(data []byte, database interfaces.Database) (models.Card, error) {
 	id := uuid.NewV4().String()
-	now := time.Now() //.UTC()
-	newcart := models.Card{ID: id, Data: data, CreateTime: &now, Box: 1}
-	err := database.AddNewCard(newcart)
+	now := time.Now()
+	newcard := models.NewCard()
+	newcard.ID = id
+	newcard.Data = data
+	newcard.Box = 1
+	newcard.CreateTime = &now
+	err := database.AddNewCard(*newcard)
 	if err != nil {
-		return models.Card{}, err
+		return *models.NewCard(), err
 	}
-	return newcart, nil
+	return *newcard, nil
 }
 
 // Review() return all card with box==1.

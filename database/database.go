@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"sync"
-	"time"
 
 	"github.com/Ali-Farhadnia/LeitnerBoxCore/models"
 	_ "github.com/mattn/go-sqlite3"
@@ -152,7 +151,7 @@ func (db *DB) GetCards() ([]models.Card, error) {
 	}
 	cards := make([]models.Card, 0)
 	for rows.Next() {
-		card := models.Card{CreateTime: &time.Time{}}
+		card := models.NewCard()
 		//var t time.Time
 		err = rows.Scan(&card.ID, &card.Box, &card.Data, card.CreateTime)
 		if err != nil {
@@ -166,7 +165,7 @@ func (db *DB) GetCards() ([]models.Card, error) {
 			}
 			card.CreateTime = ti.UTC().Local()
 		*/
-		cards = append(cards, card)
+		cards = append(cards, *card)
 	}
 	err = rows.Err()
 	if err != nil {
@@ -177,18 +176,18 @@ func (db *DB) GetCards() ([]models.Card, error) {
 
 func (db *DB) FindByID(id string) (models.Card, error) {
 	if err := db.checkconnection(); err != nil {
-		return models.Card{}, err
+		return *models.NewCard(), err
 	}
 	var card models.Card
 	sqlStatement := `SELECT * FROM card WHERE id=$1;`
 	row := db.client.QueryRow(sqlStatement, id)
 	err := row.Err()
 	if err != nil {
-		return models.Card{}, err
+		return *models.NewCard(), err
 	}
 	err = row.Scan(&card.ID, &card.Box, &card.Data, &card.CreateTime)
 	if err != nil {
-		return models.Card{}, err
+		return *models.NewCard(), err
 	}
 
 	return card, nil

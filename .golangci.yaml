@@ -21,7 +21,7 @@ linters:
     - wastedassign
     - varnamelen
     - paralleltest
-    - exhaustivestruct
+    # - exhaustivestruct
     # - unconvert
     # - godot
     - revive

@@ -267,11 +267,11 @@ func HandleEdit(opt wmenu.Opt, db interfaces.Database, card *models.Card) error 
 func CoHandleAdd(db interfaces.Database, addmenu wmenu.Menu) error {
 	fmt.Println("--------------------------------")
 	defer fmt.Println("--------------------------------")
-	newcard := models.Card{}
+	newcard := models.NewCard()
 	flag := true
 	for flag {
 		addmenu.Action(func(opts []wmenu.Opt) error {
-			err := HandleAdd(opts[0], db, &newcard)
+			err := HandleAdd(opts[0], db, newcard)
 			if errors.Is(err, errNotComplete) {
 				flag = true
 				return nil
@@ -283,7 +283,7 @@ func CoHandleAdd(db interfaces.Database, addmenu wmenu.Menu) error {
 			flag = false
 			return nil
 		})
-		PrintCard(newcard, false, false, true, false)
+		PrintCard(*newcard, false, false, true, false)
 		err := addmenu.Run()
 		if err != nil {
 			return err

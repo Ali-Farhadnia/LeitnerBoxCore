@@ -31,7 +31,7 @@ func (db *MemoryDatabase) FindByID(id string) (models.Card, error) {
 			return card, nil
 		}
 	}
-	return models.Card{}, errors.New("nothings fount")
+	return *models.NewCard(), errors.New("nothings fount")
 }
 func (db *MemoryDatabase) UpdateCard(card2 models.Card) error {
 	if string(card2.Data) == "updatecard error" {
