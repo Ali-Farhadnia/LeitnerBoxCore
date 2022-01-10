@@ -47,11 +47,11 @@ const (
 	setData = 0
 	add     = 1
 	// review options.
-	yes    = 0
-	no     = 1
-	edit   = 2
-	delete = 3
-	next   = 4
+	yes        = 0
+	no         = 1
+	edit       = 2
+	deletecard = 3
+	next       = 4
 	// edit options.
 	editData = 0
 	editBox  = 1
@@ -72,7 +72,7 @@ func HandleFunc(db interfaces.Database, opts []wmenu.Opt) error {
 	reviewmenu.Option("I remember this card", yes, false, nil)
 	reviewmenu.Option("I do not remember this card", no, false, nil)
 	reviewmenu.Option("edit this card", edit, false, nil)
-	reviewmenu.Option("delete this card", delete, false, nil)
+	reviewmenu.Option("delete this card", deletecard, false, nil)
 	reviewmenu.Option("next card", next, false, nil)
 	reviewmenu.Option("cancel", cancel, false, nil)
 
@@ -166,7 +166,7 @@ func HandleReview(opt wmenu.Opt, db interfaces.Database, card *models.Card) erro
 		if err != nil {
 			return err
 		}
-	case delete:
+	case deletecard:
 		err := DeleteCard(card.ID, db)
 		if err != nil {
 			return err
