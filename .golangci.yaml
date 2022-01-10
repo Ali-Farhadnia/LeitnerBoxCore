@@ -16,7 +16,7 @@ linters:
     - wsl
     - gochecknoglobals
     - goerr113
-    - nlreturn
+    # - nlreturn
     # - predeclared
     # - wastedassign
     # - paralleltest

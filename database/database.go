@@ -51,6 +51,7 @@ func NewDB() (*DB, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return &rdb, nil
 }
 
@@ -64,6 +65,7 @@ func (db *DB) checkConnection() error {
 		}
 		db.client = res
 	}
+
 	return nil
 }
 
@@ -90,6 +92,7 @@ func (db *DB) createCardTable() error {
 			return nil
 		case "":
 			log.Println("failed to create card table")
+
 			return err
 		default:
 			if res == nil {
@@ -108,6 +111,7 @@ func (db *DB) createCardTable() error {
 			return nil
 		}
 	}
+
 	return nil
 }
 
@@ -171,6 +175,7 @@ func (db *DB) GetCards() ([]models.Card, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return cards, nil
 }
 
@@ -218,6 +223,7 @@ func (db *DB) UpdateCard(card models.Card) error {
 	if affected == 0 {
 		return errors.New("nothing updated")
 	}
+
 	return nil
 }
 
@@ -243,5 +249,6 @@ func (db *DB) DeleteCard(id string) error {
 	if affected == 0 {
 		return errors.New("nothing deleted")
 	}
+
 	return nil
 }

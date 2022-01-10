@@ -100,6 +100,7 @@ func HandleFunc(db interfaces.Database, opts []wmenu.Opt) error {
 		fmt.Println("Goodby")
 		os.Exit(0)
 	}
+
 	return nil
 }
 
@@ -110,10 +111,12 @@ func CoHandleReview(db interfaces.Database, reviewmenu wmenu.Menu) error {
 	carts, err := service.Review(db)
 	if err != nil {
 		fmt.Println(ColorRed + err.Error() + ColorReset)
+
 		return err
 	}
 	if len(carts) == 0 {
 		fmt.Println(ColorRed + "nothings to review" + ColorReset)
+
 		return errors.New("nothings to review")
 	}
 	for _, card := range carts {
@@ -124,8 +127,10 @@ func CoHandleReview(db interfaces.Database, reviewmenu wmenu.Menu) error {
 			err := HandleReview(opts[0], db, &card)
 			if err != nil {
 				fmt.Println(ColorRed + err.Error() + ColorReset)
+
 				return err
 			}
+
 			return nil
 		})
 
@@ -135,6 +140,7 @@ func CoHandleReview(db interfaces.Database, reviewmenu wmenu.Menu) error {
 		}
 
 	}
+
 	return nil
 }
 
@@ -154,12 +160,14 @@ func HandleReview(opt wmenu.Opt, db interfaces.Database, card *models.Card) erro
 			return err
 		}
 		fmt.Println(ColorGreen + "Successful" + ColorReset)
+
 		return nil
 	case no:
 		if err := service.RejectTheCard(card.ID, db); err != nil {
 			return err
 		}
 		fmt.Println(ColorGreen + "Successful" + ColorReset)
+
 		return nil
 	case edit:
 		err := CoHandleEdit(db, *editmenu, card)
@@ -172,12 +180,14 @@ func HandleReview(opt wmenu.Opt, db interfaces.Database, card *models.Card) erro
 			return err
 		}
 		fmt.Println(ColorGreen + "Successful" + ColorReset)
+
 		return nil
 	case next:
 		return nil
 	case cancel:
 		return nil
 	}
+
 	return nil
 }
 
@@ -191,13 +201,16 @@ func CoHandleEdit(db interfaces.Database, editmenu wmenu.Menu, card *models.Card
 			err := HandleEdit(opts[0], db, card)
 			if errors.Is(err, errNotComplete) {
 				flag = true
+
 				return nil
 			} else if err != nil {
 				fmt.Println(ColorRed + err.Error() + ColorReset)
 				flag = false
+
 				return err
 			}
 			flag = false
+
 			return nil
 		})
 		PrintCard(*card, false, true, true, false)
@@ -206,6 +219,7 @@ func CoHandleEdit(db interfaces.Database, editmenu wmenu.Menu, card *models.Card
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -227,6 +241,7 @@ func HandleEdit(opt wmenu.Opt, db interfaces.Database, card *models.Card) error 
 			data = strings.TrimSuffix(data, "\r")
 			if data == "" {
 				fmt.Println(ColorRed + "unvalid input" + ColorReset)
+
 				continue
 			} else {
 				break
@@ -234,6 +249,7 @@ func HandleEdit(opt wmenu.Opt, db interfaces.Database, card *models.Card) error 
 		}
 		fmt.Println(ColorGreen + "Successful" + ColorReset)
 		card.Data = []byte(data)
+
 		return errNotComplete
 
 	case editBox:
@@ -251,14 +267,17 @@ func HandleEdit(opt wmenu.Opt, db interfaces.Database, card *models.Card) error 
 			i, err := strconv.Atoi(sbox)
 			if err != nil {
 				fmt.Println(ColorRed + "unvalid input" + ColorReset)
+
 				continue
 			} else {
 				ibox = i
+
 				break
 			}
 		}
 		fmt.Println(ColorGreen + "Successful" + ColorReset)
 		card.Box = ibox
+
 		return errNotComplete
 	case save:
 		err := service.UpdateCard(*card, db)
@@ -266,10 +285,12 @@ func HandleEdit(opt wmenu.Opt, db interfaces.Database, card *models.Card) error 
 			return err
 		}
 		fmt.Println(ColorGreen + "Successful" + ColorReset)
+
 		return nil
 	case cancel:
 		return nil
 	}
+
 	return nil
 }
 
@@ -284,13 +305,16 @@ func CoHandleAdd(db interfaces.Database, addmenu wmenu.Menu) error {
 			err := HandleAdd(opts[0], db, newcard)
 			if errors.Is(err, errNotComplete) {
 				flag = true
+
 				return nil
 			} else if err != nil {
 				fmt.Println(ColorRed + err.Error() + ColorReset)
 				flag = false
+
 				return err
 			}
 			flag = false
+
 			return nil
 		})
 		PrintCard(*newcard, false, false, true, false)
@@ -299,6 +323,7 @@ func CoHandleAdd(db interfaces.Database, addmenu wmenu.Menu) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -319,6 +344,7 @@ func HandleAdd(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 			data = strings.TrimSuffix(data, "\r")
 			if data == "" {
 				fmt.Println(ColorRed + "unvalid input" + ColorReset)
+
 				continue
 			} else {
 				break
@@ -326,6 +352,7 @@ func HandleAdd(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 		}
 		fmt.Println(ColorGreen + "Successful" + ColorReset)
 		card.Data = []byte(data)
+
 		return errNotComplete
 	case add:
 		card, err := service.AddCard(card.Data, db) //To Do return card or id
@@ -334,10 +361,12 @@ func HandleAdd(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 		}
 		PrintCard(*card, true, true, true, true)
 		fmt.Println(ColorGreen + "Successful" + ColorReset)
+
 		return nil
 	case cancel:
 		return nil
 	}
+
 	return nil
 }
 
@@ -367,6 +396,7 @@ func DeleteCard(cardid string, db interfaces.Database) error {
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 

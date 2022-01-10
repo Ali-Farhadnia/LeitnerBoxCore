@@ -21,6 +21,7 @@ func AddCard(data []byte, database interfaces.Database) (*models.Card, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return newcard, nil
 }
 
@@ -78,6 +79,7 @@ func UpdateCard(card models.Card, database interfaces.Database) error {
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 
