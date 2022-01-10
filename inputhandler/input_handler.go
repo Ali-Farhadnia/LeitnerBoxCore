@@ -332,7 +332,7 @@ func HandleAdd(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 		if err != nil {
 			return err
 		}
-		PrintCard(card, true, true, true, true)
+		PrintCard(*card, true, true, true, true)
 		fmt.Println(ColorGreen + "Successful" + ColorReset)
 		return nil
 	case cancel:

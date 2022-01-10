@@ -9,7 +9,7 @@ import (
 )
 
 // AddCard create card with given data and time.now and add it to database and return it.
-func AddCard(data []byte, database interfaces.Database) (models.Card, error) {
+func AddCard(data []byte, database interfaces.Database) (*models.Card, error) {
 	id := uuid.NewV4().String()
 	now := time.Now()
 	newcard := models.NewCard()
@@ -19,9 +19,9 @@ func AddCard(data []byte, database interfaces.Database) (models.Card, error) {
 	newcard.CreateTime = &now
 	err := database.AddNewCard(*newcard)
 	if err != nil {
-		return *models.NewCard(), err
+		return nil, err
 	}
-	return *newcard, nil
+	return newcard, nil
 }
 
 // Review return all card with box==1.
@@ -49,7 +49,7 @@ func ConfirmTheCard(id string, database interfaces.Database) error {
 		return err
 	}
 	cart.Box++
-	err = database.UpdateCard(cart)
+	err = database.UpdateCard(*cart)
 	if err != nil {
 		return err
 	}
@@ -64,7 +64,7 @@ func RejectTheCard(id string, database interfaces.Database) error {
 		return err
 	}
 	cart.Box = 1
-	err = database.UpdateCard(cart)
+	err = database.UpdateCard(*cart)
 	if err != nil {
 		return err
 	}

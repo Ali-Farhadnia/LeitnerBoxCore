@@ -8,7 +8,7 @@ import (
 	"sync"
 
 	"github.com/Ali-Farhadnia/LeitnerBoxCore/models"
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/mattn/go-sqlite3" // sqlite driver
 )
 
 /* Used to create a singleton object of sql.DB client.
@@ -175,23 +175,23 @@ func (db *DB) GetCards() ([]models.Card, error) {
 }
 
 // FindByID get card d and find it in the database and return it.
-func (db *DB) FindByID(id string) (models.Card, error) {
+func (db *DB) FindByID(id string) (*models.Card, error) {
 	if err := db.checkConnection(); err != nil {
-		return *models.NewCard(), err
+		return nil, err
 	}
 	var card models.Card
 	sqlStatement := `SELECT * FROM card WHERE id=$1;`
 	row := db.client.QueryRow(sqlStatement, id)
 	err := row.Err()
 	if err != nil {
-		return *models.NewCard(), err
+		return nil, err
 	}
 	err = row.Scan(&card.ID, &card.Box, &card.Data, &card.CreateTime)
 	if err != nil {
-		return *models.NewCard(), err
+		return nil, err
 	}
 
-	return card, nil
+	return &card, nil
 }
 
 // UpdateCard get card and update it in database.
