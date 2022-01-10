@@ -29,3 +29,6 @@ linters:
     - scopelint
     - funlen
     - cyclop
+    - maligned
+    - interfacer
+    - dupl
