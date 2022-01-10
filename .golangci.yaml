@@ -11,7 +11,7 @@ linters:
     - gochecknoinits
     - gocritic
     - gofumpt
-    - gosec
+    # - gosec
     # - whitespace
     #- gochecknoglobals
     # - nlreturn

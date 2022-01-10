@@ -120,7 +120,8 @@ func CoHandleReview(db interfaces.Database, reviewmenu wmenu.Menu) error {
 
 		return errors.New("nothings to review")
 	}
-	for _, card := range carts {
+	for _, cardd := range carts {
+		card := cardd
 		fmt.Println("in review loop")
 		fmt.Println(card)
 		PrintCard(card, true, true, true, true)
