@@ -8,7 +8,7 @@ linters:
   disable:
     - wrapcheck
     - forbidigo
-    - gochecknoinits
+    # - gochecknoinits
     # - gocritic
     # - gofumpt
     # - gosec

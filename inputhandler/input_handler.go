@@ -30,6 +30,7 @@ var (
 )
 
 // init check if programm run on windows set color value to "".
+// nolint:gochecknoinits
 func init() {
 	if runtime.GOOS == "windows" {
 		ColorReset = ""
