@@ -23,9 +23,9 @@ linters:
     # - exhaustivestruct
     # - unconvert
     # - godot
+    - golint
     - varnamelen
     - revive
-    - golint
     - scopelint
     - funlen
     - cyclop

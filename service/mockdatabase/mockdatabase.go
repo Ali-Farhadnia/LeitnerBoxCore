@@ -9,6 +9,7 @@ type MockDatabase struct {
 	mock.Mock
 }
 
+//nolint:exhaustivestruct
 func NewMockedDatabase() *MockDatabase {
 	return &MockDatabase{}
 }

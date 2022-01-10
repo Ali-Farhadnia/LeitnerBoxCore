@@ -8,7 +8,7 @@ import (
 	"sync"
 
 	"github.com/Ali-Farhadnia/LeitnerBoxCore/models"
-	_ "github.com/mattn/go-sqlite3" // sqlite driver
+	_ "github.com/mattn/go-sqlite3"
 )
 
 /* Used to create a singleton object of sql.DB client.
