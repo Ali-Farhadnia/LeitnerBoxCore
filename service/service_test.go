@@ -32,7 +32,6 @@ func TestAddCard(t *testing.T) {
 
 		assert.EqualError(t, err, "add card error")
 	})
-
 }
 
 func TestReview(t *testing.T) {

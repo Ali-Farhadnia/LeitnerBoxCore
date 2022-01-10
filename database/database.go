@@ -13,12 +13,15 @@ import (
 
 /* Used to create a singleton object of sql.DB client.
 Initialized and exposed through GetDB().*/
+// nolint:gochecknoglobals
 var clientInstance *sql.DB
 
 //Used during creation of singleton client object in GetDB().
+// nolint:gochecknoglobals
 var errClientInstance error
 
 //DBOnce used to execute client creation procedure only once.
+// nolint:gochecknoglobals
 var DBOnce sync.Once
 
 // getdb create sqlite database client from ./database/mydb.db.
@@ -29,7 +32,6 @@ func getdb() (*sql.DB, error) {
 			errClientInstance = err
 		}
 		clientInstance = res
-
 	})
 
 	return clientInstance, errClientInstance
@@ -47,8 +49,7 @@ func NewDB() (*DB, error) {
 		return nil, err
 	}
 	rdb := DB{client: db}
-	err = rdb.createCardTable()
-	if err != nil {
+	if err = rdb.createCardTable(); err != nil {
 		return nil, err
 	}
 
@@ -99,9 +100,7 @@ func (db *DB) createCardTable() error {
 				return err
 			}
 			e, err := res.RowsAffected()
-
 			if err != nil {
-
 				return err
 			}
 			if e == 0 {

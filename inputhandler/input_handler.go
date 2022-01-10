@@ -17,6 +17,7 @@ import (
 )
 
 // Colors.
+// nolint:gochecknoglobals
 var (
 	ColorReset  = "\033[0m"
 	ColorRed    = "\033[31m"
@@ -138,7 +139,6 @@ func CoHandleReview(db interfaces.Database, reviewmenu wmenu.Menu) error {
 		if err != nil {
 			return err
 		}
-
 	}
 
 	return nil
@@ -402,7 +402,6 @@ func DeleteCard(cardid string, db interfaces.Database) error {
 
 // PrintCard print card to stdout.
 func PrintCard(card models.Card, showID, showBox, showData, showCreateTime bool) {
-
 	fmt.Println(ColorPurple + "**************** card ****************")
 	if showID {
 		fmt.Println("ID:", card.ID)

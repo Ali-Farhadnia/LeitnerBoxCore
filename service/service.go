@@ -17,8 +17,7 @@ func AddCard(data []byte, database interfaces.Database) (*models.Card, error) {
 	newcard.Data = data
 	newcard.Box = 1
 	newcard.CreateTime = &now
-	err := database.AddNewCard(*newcard)
-	if err != nil {
+	if err := database.AddNewCard(*newcard); err != nil {
 		return nil, err
 	}
 
@@ -32,7 +31,6 @@ func Review(database interfaces.Database) ([]models.Card, error) {
 		return nil, err
 	}
 	wantedcarts := make([]models.Card, 0)
-
 	for _, cart := range allcarts {
 		if cart.Box == 1 { //this must be some logic not just this it must be chainged.
 			wantedcarts = append(wantedcarts, cart)

@@ -12,10 +12,8 @@ linters:
     - gocritic
     - gofumpt
     - gosec
-    - whitespace
-    - wsl
-    - gochecknoglobals
-    - goerr113
+    # - whitespace
+    #- gochecknoglobals
     # - nlreturn
     # - predeclared
     # - wastedassign
@@ -23,6 +21,8 @@ linters:
     # - exhaustivestruct
     # - unconvert
     # - godot
+    - wsl
+    - goerr113
     - golint
     - varnamelen
     - revive
@@ -32,3 +32,4 @@ linters:
     - maligned
     - interfacer
     - dupl
+    - nolintlint
