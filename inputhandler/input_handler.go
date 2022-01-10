@@ -66,7 +66,7 @@ var errNotComplete = errors.New("not complete yet")
 
 // HandleFunc main input handler.
 func HandleFunc(db interfaces.Database, opts []wmenu.Opt) error {
-	//review menu
+	// review menu
 	reviewmenu := wmenu.NewMenu("Select one:")
 	reviewmenu.LoopOnInvalid()
 	reviewmenu.AddColor(wlog.Cyan, wlog.BrightYellow, wlog.BrightCyan, wlog.BrightRed)
@@ -77,7 +77,7 @@ func HandleFunc(db interfaces.Database, opts []wmenu.Opt) error {
 	reviewmenu.Option("next card", next, false, nil)
 	reviewmenu.Option("cancel", cancel, false, nil)
 
-	//add card menu
+	// add card menu
 	addmenu := wmenu.NewMenu("Please select:")
 	addmenu.Option("set data", setData, false, nil)
 	addmenu.Option("add", add, false, nil)
@@ -85,7 +85,7 @@ func HandleFunc(db interfaces.Database, opts []wmenu.Opt) error {
 	addmenu.LoopOnInvalid()
 	addmenu.AddColor(wlog.Cyan, wlog.BrightYellow, wlog.BrightCyan, wlog.BrightRed)
 
-	//handle input
+	// handle input
 	switch opts[0].Value {
 	case 0:
 		err := CoHandleAdd(db, *addmenu)
@@ -147,7 +147,7 @@ func CoHandleReview(db interfaces.Database, reviewmenu wmenu.Menu) error {
 
 // HandleReview handle review menu.
 func HandleReview(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
-	//edit card menu
+	// edit card menu
 	editmenu := wmenu.NewMenu("select one:")
 	editmenu.LoopOnInvalid()
 	editmenu.AddColor(wlog.Cyan, wlog.BrightYellow, wlog.BrightCyan, wlog.BrightRed)
@@ -356,7 +356,7 @@ func HandleAdd(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 
 		return errNotComplete
 	case add:
-		card, err := service.AddCard(card.Data, db) //To Do return card or id
+		card, err := service.AddCard(card.Data, db)
 		if err != nil {
 			return err
 		}

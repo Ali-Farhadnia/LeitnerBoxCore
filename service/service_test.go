@@ -13,7 +13,6 @@ import (
 
 func TestAddCard(t *testing.T) {
 	t.Parallel()
-	//db := memorydatabase.MemoryDatabase{Cards: make([]models.Card, 0)}
 	t.Run("Successful", func(t *testing.T) {
 		t.Parallel()
 		db := mockdatabase.NewMockedDatabase()
@@ -189,6 +188,7 @@ func TestUpdateCard(t *testing.T) {
 		assert.EqualError(t, err, "updatecard error")
 	})
 }
+
 func TestDeleteCard(t *testing.T) {
 	t.Parallel()
 	t.Run("Successful", func(t *testing.T) {

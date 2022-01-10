@@ -44,6 +44,7 @@ func (m *MockDatabase) UpdateCard(card models.Card) error {
 
 	return args.Error(0)
 }
+
 func (m *MockDatabase) DeleteCard(id string) error {
 	args := m.Called(id)
 

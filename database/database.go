@@ -16,11 +16,11 @@ Initialized and exposed through GetDB().*/
 // nolint:gochecknoglobals
 var clientInstance *sql.DB
 
-//Used during creation of singleton client object in GetDB().
+// Used during creation of singleton client object in GetDB().
 // nolint:gochecknoglobals
 var errClientInstance error
 
-//DBOnce used to execute client creation procedure only once.
+// DBOnce used to execute client creation procedure only once.
 // nolint:gochecknoglobals
 var DBOnce sync.Once
 
@@ -89,7 +89,7 @@ func (db *DB) createCardTable() error {
 	if err != nil {
 		switch err.Error() {
 		case e:
-			//log.Println("books card created")
+			// log.Println("books card created")
 			return nil
 		case "":
 			log.Println("failed to create card table")
@@ -106,7 +106,7 @@ func (db *DB) createCardTable() error {
 			if e == 0 {
 				return errors.New("somthing went wrong in create table")
 			}
-			//log.Println("books card created")
+			// log.Println("books card created")
 			return nil
 		}
 	}
@@ -155,19 +155,10 @@ func (db *DB) GetCards() ([]models.Card, error) {
 	cards := make([]models.Card, 0)
 	for rows.Next() {
 		card := models.NewCard()
-		//var t time.Time
 		err = rows.Scan(&card.ID, &card.Box, &card.Data, card.CreateTime)
 		if err != nil {
 			return nil, err
 		}
-
-		/*
-			ti, err := time.Parse("2006-01-02 15:04:05 -0700 MST", t)
-			if err != nil {
-				return nil, err
-			}
-			card.CreateTime = ti.UTC().Local()
-		*/
 		cards = append(cards, *card)
 	}
 	err = rows.Err()
@@ -200,8 +191,6 @@ func (db *DB) FindByID(id string) (*models.Card, error) {
 
 // UpdateCard get card and update it in database.
 func (db *DB) UpdateCard(card models.Card) error {
-	//fmt.Println("--------in update")
-	//defer fmt.Println("--------in update")
 	if err := db.checkConnection(); err != nil {
 		return err
 	}

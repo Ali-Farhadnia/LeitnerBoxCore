@@ -32,7 +32,8 @@ func Review(database interfaces.Database) ([]models.Card, error) {
 	}
 	wantedcarts := make([]models.Card, 0)
 	for _, cart := range allcarts {
-		if cart.Box == 1 { //this must be some logic not just this it must be chainged.
+		// this must be some logic not just this it must be chainged.
+		if cart.Box == 1 {
 			wantedcarts = append(wantedcarts, cart)
 		}
 	}
@@ -43,7 +44,6 @@ func Review(database interfaces.Database) ([]models.Card, error) {
 // ConfirmTheCard get card id and increases it by one unit.
 func ConfirmTheCard(id string, database interfaces.Database) error {
 	cart, err := database.FindByID(id)
-
 	if err != nil {
 		return err
 	}
