@@ -414,7 +414,7 @@ func PrintCard(card models.Card, showID, showBox, showData, showCreateTime bool)
 		fmt.Println("Box:", card.Box)
 	}
 	if showData {
-		fmt.Println("Data:", card.Data)
+		fmt.Println("Data:", string(card.Data))
 	}
 	if showCreateTime {
 		fmt.Println("Create time:", card.CreateTime)
