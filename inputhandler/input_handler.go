@@ -377,6 +377,7 @@ func DeleteCard(cardid string, db interfaces.Database) error {
 
 	var input string
 	var err error
+myloop:
 	for {
 		fmt.Print("Are you sure(yes or no)?")
 		input, err = reader.ReadString('\n')
@@ -385,11 +386,12 @@ func DeleteCard(cardid string, db interfaces.Database) error {
 		}
 		input = strings.TrimSuffix(input, "\n")
 		input = strings.TrimSuffix(input, "\r")
-		if input == "yes" {
-			break
-		} else if input == "no" {
+		switch input {
+		case "yes":
+			break myloop
+		case "no":
 			return nil
-		} else {
+		default:
 			fmt.Println(ColorRed + "unvalid input" + ColorReset)
 		}
 	}

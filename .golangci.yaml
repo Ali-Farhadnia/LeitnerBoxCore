@@ -9,7 +9,7 @@ linters:
     - wrapcheck
     - forbidigo
     - gochecknoinits
-    - gocritic
+    # - gocritic
     # - gofumpt
     # - gosec
     # - whitespace
