@@ -8,19 +8,6 @@ linters:
   disable:
     - wrapcheck
     - forbidigo
-    # - gochecknoinits
-    # - gocritic
-    # - gofumpt
-    # - gosec
-    # - whitespace
-    #- gochecknoglobals
-    # - nlreturn
-    # - predeclared
-    # - wastedassign
-    # - paralleltest
-    # - exhaustivestruct
-    # - unconvert
-    # - godot
     - wsl
     - goerr113
     - golint
