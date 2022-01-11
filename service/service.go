@@ -3,13 +3,13 @@ package service
 import (
 	"time"
 
-	"github.com/Ali-Farhadnia/LeitnerBoxCore/interfaces"
+	database_interface "github.com/Ali-Farhadnia/LeitnerBoxCore/database"
 	"github.com/Ali-Farhadnia/LeitnerBoxCore/models"
 	uuid "github.com/satori/go.uuid"
 )
 
 // AddCard create card with given data and time.now and add it to database and return it.
-func AddCard(data []byte, database interfaces.Database) (*models.Card, error) {
+func AddCard(data []byte, database database_interface.Database) (*models.Card, error) {
 	id := uuid.NewV4().String()
 	now := time.Now()
 	newcard := models.NewCard()
@@ -27,7 +27,7 @@ func AddCard(data []byte, database interfaces.Database) (*models.Card, error) {
 }
 
 // Review return all card with box==1.
-func Review(database interfaces.Database) ([]models.Card, error) {
+func Review(database database_interface.Database) ([]models.Card, error) {
 	allcarts, err := database.GetCards()
 	if err != nil {
 		return nil, err
@@ -46,7 +46,7 @@ func Review(database interfaces.Database) ([]models.Card, error) {
 }
 
 // ConfirmTheCard get card id and increases it by one unit.
-func ConfirmTheCard(id string, database interfaces.Database) error {
+func ConfirmTheCard(id string, database database_interface.Database) error {
 	cart, err := database.FindByID(id)
 	if err != nil {
 		return err
@@ -62,7 +62,7 @@ func ConfirmTheCard(id string, database interfaces.Database) error {
 }
 
 // RejectTheCard get card id and set it box to one.
-func RejectTheCard(id string, database interfaces.Database) error {
+func RejectTheCard(id string, database database_interface.Database) error {
 	cart, err := database.FindByID(id)
 	if err != nil {
 		return err
@@ -79,7 +79,7 @@ func RejectTheCard(id string, database interfaces.Database) error {
 }
 
 // UpdateCard get one card and update it in database.
-func UpdateCard(card models.Card, database interfaces.Database) error {
+func UpdateCard(card models.Card, database database_interface.Database) error {
 	err := database.UpdateCard(card)
 	if err != nil {
 		return err
@@ -89,7 +89,7 @@ func UpdateCard(card models.Card, database interfaces.Database) error {
 }
 
 // DeleteCard get one card and remove it from database.
-func DeleteCard(id string, database interfaces.Database) error {
+func DeleteCard(id string, database database_interface.Database) error {
 	if err := database.DeleteCard(id); err != nil {
 		return err
 	}

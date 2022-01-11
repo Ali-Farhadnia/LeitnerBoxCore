@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/Ali-Farhadnia/LeitnerBoxCore/database"
+	"github.com/Ali-Farhadnia/LeitnerBoxCore/database/database_sqlite"
 	"github.com/Ali-Farhadnia/LeitnerBoxCore/inputhandler"
 	"github.com/dixonwille/wmenu"
 	"gopkg.in/dixonwille/wlog.v2"
@@ -13,7 +13,7 @@ import (
 const exit = -1
 
 func main() {
-	db, err := database.NewDB()
+	db, err := database_sqlite.NewDB()
 	if err != nil {
 		log.Fatal(err)
 	}

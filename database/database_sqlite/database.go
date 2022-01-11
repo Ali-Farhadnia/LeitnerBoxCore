@@ -1,12 +1,12 @@
-package database
+package database_sqlite
 
 import (
 	"database/sql"
-	"errors"
 	"fmt"
 	"log"
 	"sync"
 
+	database_interface "github.com/Ali-Farhadnia/LeitnerBoxCore/database"
 	"github.com/Ali-Farhadnia/LeitnerBoxCore/models"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -27,7 +27,7 @@ var DBOnce sync.Once
 // getdb create sqlite database client from ./database/mydb.db.
 func getdb() (*sql.DB, error) {
 	DBOnce.Do(func() {
-		res, err := sql.Open("sqlite3", "./database/mydb.db")
+		res, err := sql.Open("sqlite3", "./database/sqlite/mydb.db")
 		if err != nil {
 			errClientInstance = err
 		}
@@ -110,7 +110,7 @@ func (db *DB) createCardTable() error {
 			}
 
 			if e == 0 {
-				return errors.New("somthing went wrong in create table")
+				return database_interface.ErrSomthingWentWrong
 			}
 
 			return nil
@@ -139,7 +139,7 @@ func (db *DB) AddNewCard(card models.Card) error {
 	}
 
 	if affected == 0 {
-		return errors.New("nothing updated")
+		return database_interface.ErrSomthingWentWrong
 	}
 
 	return nil
@@ -232,7 +232,7 @@ func (db *DB) UpdateCard(card models.Card) error {
 	}
 
 	if affected == 0 {
-		return errors.New("nothing updated")
+		return database_interface.ErrSomthingWentWrong
 	}
 
 	return nil
@@ -261,7 +261,7 @@ func (db *DB) DeleteCard(id string) error {
 	}
 
 	if affected == 0 {
-		return errors.New("nothing deleted")
+		return database_interface.ErrSomthingWentWrong
 	}
 
 	return nil

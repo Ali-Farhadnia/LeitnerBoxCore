@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Ali-Farhadnia/LeitnerBoxCore/interfaces"
+	database_interface "github.com/Ali-Farhadnia/LeitnerBoxCore/database"
 	"github.com/Ali-Farhadnia/LeitnerBoxCore/models"
 	"github.com/Ali-Farhadnia/LeitnerBoxCore/service"
 	"github.com/dixonwille/wmenu"
@@ -66,7 +66,7 @@ const (
 var errNotComplete = errors.New("not complete yet")
 
 // HandleFunc main input handler.
-func HandleFunc(db interfaces.Database, opts []wmenu.Opt) error {
+func HandleFunc(db database_interface.Database, opts []wmenu.Opt) error {
 	// review menu
 	reviewmenu := wmenu.NewMenu("Select one:")
 
@@ -108,8 +108,11 @@ func HandleFunc(db interfaces.Database, opts []wmenu.Opt) error {
 	return nil
 }
 
+// nothing to review error.
+var errNothigToReview = errors.New("nothings to review")
+
 // CoHandleReview run HandleReview in proper way.
-func CoHandleReview(db interfaces.Database, reviewmenu wmenu.Menu) error {
+func CoHandleReview(db database_interface.Database, reviewmenu wmenu.Menu) error {
 	fmt.Println("--------------------------------")
 	defer fmt.Println("--------------------------------")
 
@@ -123,7 +126,7 @@ func CoHandleReview(db interfaces.Database, reviewmenu wmenu.Menu) error {
 	if len(carts) == 0 {
 		fmt.Println(ColorRed + "nothings to review" + ColorReset)
 
-		return errors.New("nothings to review")
+		return errNothigToReview
 	}
 
 	for _, cardd := range carts {
@@ -153,7 +156,7 @@ func CoHandleReview(db interfaces.Database, reviewmenu wmenu.Menu) error {
 }
 
 // HandleReview handle review menu.
-func HandleReview(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
+func HandleReview(opt wmenu.Opt, db database_interface.Database, card *models.Card) error {
 	// edit card menu
 	editmenu := wmenu.NewMenu("select one:")
 
@@ -205,7 +208,7 @@ func HandleReview(opt wmenu.Opt, db interfaces.Database, card *models.Card) erro
 }
 
 // CoHandleEdit run HandleEdit in proper way.
-func CoHandleEdit(db interfaces.Database, editmenu wmenu.Menu, card *models.Card) error {
+func CoHandleEdit(db database_interface.Database, editmenu wmenu.Menu, card *models.Card) error {
 	fmt.Println("--------------------------------")
 	defer fmt.Println("--------------------------------")
 
@@ -240,7 +243,7 @@ func CoHandleEdit(db interfaces.Database, editmenu wmenu.Menu, card *models.Card
 }
 
 // HandleEdit handle edit menu.
-func HandleEdit(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
+func HandleEdit(opt wmenu.Opt, db database_interface.Database, card *models.Card) error {
 	reader := bufio.NewReader(os.Stdin)
 
 	switch opt.Value {
@@ -325,7 +328,7 @@ func HandleEdit(opt wmenu.Opt, db interfaces.Database, card *models.Card) error 
 }
 
 // CoHandleAdd run HandleAdd in proper way.
-func CoHandleAdd(db interfaces.Database, addmenu wmenu.Menu) error {
+func CoHandleAdd(db database_interface.Database, addmenu wmenu.Menu) error {
 	fmt.Println("--------------------------------")
 	defer fmt.Println("--------------------------------")
 
@@ -363,7 +366,7 @@ func CoHandleAdd(db interfaces.Database, addmenu wmenu.Menu) error {
 }
 
 // HandleAdd handle add menu.
-func HandleAdd(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
+func HandleAdd(opt wmenu.Opt, db database_interface.Database, card *models.Card) error {
 	reader := bufio.NewReader(os.Stdin)
 
 	switch opt.Value {
@@ -415,7 +418,7 @@ func HandleAdd(opt wmenu.Opt, db interfaces.Database, card *models.Card) error {
 }
 
 // DeleteCard handle delete option.
-func DeleteCard(cardid string, db interfaces.Database) error {
+func DeleteCard(cardid string, db database_interface.Database) error {
 	reader := bufio.NewReader(os.Stdin)
 
 	var input string
