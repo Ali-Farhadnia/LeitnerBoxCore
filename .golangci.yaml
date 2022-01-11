@@ -8,8 +8,6 @@ linters:
   disable:
     - wrapcheck
     - forbidigo
-    # - wsl
-    # - goerr113
     - golint
     - varnamelen
     - revive
