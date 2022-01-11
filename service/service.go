@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"time"
 
 	database_interface "github.com/Ali-Farhadnia/LeitnerBoxCore/database"
@@ -20,7 +21,7 @@ func AddCard(data []byte, database database_interface.Database) (*models.Card, e
 	newcard.CreateTime = &now
 
 	if err := database.AddNewCard(*newcard); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("AddCard error :%w", err)
 	}
 
 	return newcard, nil
@@ -30,7 +31,7 @@ func AddCard(data []byte, database database_interface.Database) (*models.Card, e
 func Review(database database_interface.Database) ([]models.Card, error) {
 	allcarts, err := database.GetCards()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Review error :%w", err)
 	}
 
 	wantedcarts := make([]models.Card, 0)
@@ -49,13 +50,13 @@ func Review(database database_interface.Database) ([]models.Card, error) {
 func ConfirmTheCard(id string, database database_interface.Database) error {
 	cart, err := database.FindByID(id)
 	if err != nil {
-		return err
+		return fmt.Errorf("ConfirmTheCard error :%w", err)
 	}
 	cart.Box++
 
 	err = database.UpdateCard(*cart)
 	if err != nil {
-		return err
+		return fmt.Errorf("ConfirmTheCard error :%w", err)
 	}
 
 	return nil
@@ -65,14 +66,14 @@ func ConfirmTheCard(id string, database database_interface.Database) error {
 func RejectTheCard(id string, database database_interface.Database) error {
 	cart, err := database.FindByID(id)
 	if err != nil {
-		return err
+		return fmt.Errorf("RejectTheCard error :%w", err)
 	}
 
 	cart.Box = 1
 
 	err = database.UpdateCard(*cart)
 	if err != nil {
-		return err
+		return fmt.Errorf("RejectTheCard error :%w", err)
 	}
 
 	return nil
@@ -82,7 +83,7 @@ func RejectTheCard(id string, database database_interface.Database) error {
 func UpdateCard(card models.Card, database database_interface.Database) error {
 	err := database.UpdateCard(card)
 	if err != nil {
-		return err
+		return fmt.Errorf("UpdateCard error :%w", err)
 	}
 
 	return nil
@@ -91,7 +92,7 @@ func UpdateCard(card models.Card, database database_interface.Database) error {
 // DeleteCard get one card and remove it from database.
 func DeleteCard(id string, database database_interface.Database) error {
 	if err := database.DeleteCard(id); err != nil {
-		return err
+		return fmt.Errorf("DeleteCard error :%w", err)
 	}
 
 	return nil

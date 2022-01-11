@@ -6,15 +6,14 @@ run:
 linters:
   enable-all: true
   disable:
-    - wrapcheck
-    - forbidigo
-    - golint
+    - golint # deprecated
+    - maligned # deprecated
+    - scopelint # deprecated
+    - interfacer # deprecated
+    - revive # blanck import for database driver
+    - funlen # func:HandleEdit
+    - dupl # in test files
     - varnamelen
-    - revive
-    - scopelint
-    - funlen
     - cyclop
-    - maligned
-    - interfacer
-    - dupl
     - nolintlint
+    - forbidigo # Pending

@@ -93,12 +93,12 @@ func HandleFunc(db database_interface.Database, opts []wmenu.Opt) error {
 	case 0:
 		err := CoHandleAdd(db, *addmenu)
 		if err != nil {
-			return err
+			return fmt.Errorf("HandleFunc error :%w", err)
 		}
 	case 1:
 		err := CoHandleReview(db, *reviewmenu)
 		if err != nil {
-			return err
+			return fmt.Errorf("HandleFunc error :%w", err)
 		}
 	case -1:
 		fmt.Println("Goodby")
@@ -120,11 +120,11 @@ func CoHandleReview(db database_interface.Database, reviewmenu wmenu.Menu) error
 	if err != nil {
 		fmt.Println(ColorRed + err.Error() + ColorReset)
 
-		return err
+		return fmt.Errorf("HandleFunc error :%w", err)
 	}
 
 	if len(carts) == 0 {
-		fmt.Println(ColorRed + "nothings to review" + ColorReset)
+		fmt.Println(ColorRed + "CoHandleReview to review" + ColorReset)
 
 		return errNothigToReview
 	}
@@ -140,7 +140,7 @@ func CoHandleReview(db database_interface.Database, reviewmenu wmenu.Menu) error
 			if err != nil {
 				fmt.Println(ColorRed + err.Error() + ColorReset)
 
-				return err
+				return fmt.Errorf("HandleFunc error :%w", err)
 			}
 
 			return nil
@@ -148,7 +148,7 @@ func CoHandleReview(db database_interface.Database, reviewmenu wmenu.Menu) error
 
 		err := reviewmenu.Run()
 		if err != nil {
-			return err
+			return fmt.Errorf("HandleFunc error :%w", err)
 		}
 	}
 
@@ -170,7 +170,7 @@ func HandleReview(opt wmenu.Opt, db database_interface.Database, card *models.Ca
 	switch opt.Value {
 	case yes:
 		if err := service.ConfirmTheCard(card.ID, db); err != nil {
-			return err
+			return fmt.Errorf("HandleReview error :%w", err)
 		}
 
 		fmt.Println(ColorGreen + "Successful" + ColorReset)
@@ -178,7 +178,7 @@ func HandleReview(opt wmenu.Opt, db database_interface.Database, card *models.Ca
 		return nil
 	case no:
 		if err := service.RejectTheCard(card.ID, db); err != nil {
-			return err
+			return fmt.Errorf("HandleReview error :%w", err)
 		}
 
 		fmt.Println(ColorGreen + "Successful" + ColorReset)
@@ -187,12 +187,12 @@ func HandleReview(opt wmenu.Opt, db database_interface.Database, card *models.Ca
 	case edit:
 		err := CoHandleEdit(db, *editmenu, card)
 		if err != nil {
-			return err
+			return fmt.Errorf("HandleReview error :%w", err)
 		}
 	case deletecard:
 		err := DeleteCard(card.ID, db)
 		if err != nil {
-			return err
+			return fmt.Errorf("HandleReview error :%w", err)
 		}
 
 		fmt.Println(ColorGreen + "Successful" + ColorReset)
@@ -225,7 +225,7 @@ func CoHandleEdit(db database_interface.Database, editmenu wmenu.Menu, card *mod
 				fmt.Println(ColorRed + err.Error() + ColorReset)
 				flag = false
 
-				return err
+				return fmt.Errorf("CoHandleEdit error :%w", err)
 			}
 			flag = false
 
@@ -235,7 +235,7 @@ func CoHandleEdit(db database_interface.Database, editmenu wmenu.Menu, card *mod
 
 		err := editmenu.Run()
 		if err != nil {
-			return err
+			return fmt.Errorf("CoHandleEdit error :%w", err)
 		}
 	}
 
@@ -257,7 +257,7 @@ func HandleEdit(opt wmenu.Opt, db database_interface.Database, card *models.Card
 
 			data, err = reader.ReadString('\n')
 			if err != nil {
-				return err
+				return fmt.Errorf("HandleEdit error :%w", err)
 			}
 
 			data = strings.TrimSuffix(data, "\n")
@@ -289,7 +289,7 @@ func HandleEdit(opt wmenu.Opt, db database_interface.Database, card *models.Card
 
 			sbox, err = reader.ReadString('\n')
 			if err != nil {
-				return err
+				return fmt.Errorf("HandleEdit error :%w", err)
 			}
 
 			sbox = strings.TrimSuffix(sbox, "\n")
@@ -314,7 +314,7 @@ func HandleEdit(opt wmenu.Opt, db database_interface.Database, card *models.Card
 	case save:
 		err := service.UpdateCard(*card, db)
 		if err != nil {
-			return err
+			return fmt.Errorf("HandleEdit error :%w", err)
 		}
 
 		fmt.Println(ColorGreen + "Successful" + ColorReset)
@@ -358,7 +358,7 @@ func CoHandleAdd(db database_interface.Database, addmenu wmenu.Menu) error {
 
 		err := addmenu.Run()
 		if err != nil {
-			return err
+			return fmt.Errorf("CoHandleAdd error :%w", err)
 		}
 	}
 
@@ -380,7 +380,7 @@ func HandleAdd(opt wmenu.Opt, db database_interface.Database, card *models.Card)
 
 			data, err = reader.ReadString('\n')
 			if err != nil {
-				return err
+				return fmt.Errorf("HandleAdd error :%w", err)
 			}
 
 			data = strings.TrimSuffix(data, "\n")
@@ -403,7 +403,7 @@ func HandleAdd(opt wmenu.Opt, db database_interface.Database, card *models.Card)
 	case add:
 		card, err := service.AddCard(card.Data, db)
 		if err != nil {
-			return err
+			return fmt.Errorf("HandleAdd error :%w", err)
 		}
 
 		PrintCard(*card, true, true, true, true)
@@ -431,7 +431,7 @@ myloop:
 
 		input, err = reader.ReadString('\n')
 		if err != nil {
-			return err
+			return fmt.Errorf("DeleteCard error :%w", err)
 		}
 
 		input = strings.TrimSuffix(input, "\n")
@@ -449,7 +449,7 @@ myloop:
 
 	err = service.DeleteCard(cardid, db)
 	if err != nil {
-		return err
+		return fmt.Errorf("DeleteCard error :%w", err)
 	}
 
 	return nil

@@ -1,6 +1,7 @@
 package service_test
 
 import (
+	"fmt"
 	"testing"
 
 	database_interface "github.com/Ali-Farhadnia/LeitnerBoxCore/database"
@@ -76,7 +77,7 @@ func TestConfirmTheCard(t *testing.T) {
 		db.On("UpdateCard", *card2).Return(nil)
 		err := service.ConfirmTheCard(card.ID, db)
 
-		assert.EqualError(t, err, database_interface.ErrNothingFound.Error())
+		assert.EqualError(t, err, fmt.Errorf("ConfirmTheCard error :%w", database_interface.ErrNothingFound).Error())
 	})
 }
 
@@ -117,7 +118,7 @@ func TestRejectTheCard(t *testing.T) {
 		db.On("UpdateCard", *card2).Return(nil)
 		err := service.RejectTheCard(card.ID, db)
 
-		assert.EqualError(t, err, database_interface.ErrNothingFound.Error())
+		assert.EqualError(t, err, fmt.Errorf("RejectTheCard error :%w", database_interface.ErrNothingFound).Error())
 	})
 }
 

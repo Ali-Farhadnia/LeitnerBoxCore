@@ -14,12 +14,14 @@ func NewMockedDatabase() *MockDatabase {
 	return &MockDatabase{}
 }
 
+// nolint:wrapcheck
 func (m *MockDatabase) AddNewCard(card models.Card) error {
 	arg := m.Called(card)
 
 	return arg.Error(0)
 }
 
+// nolint:wrapcheck
 func (m *MockDatabase) GetCards() ([]models.Card, error) {
 	args := m.Called()
 
@@ -30,6 +32,7 @@ func (m *MockDatabase) GetCards() ([]models.Card, error) {
 	return nil, args.Error(1)
 }
 
+// nolint:wrapcheck
 func (m *MockDatabase) FindByID(id string) (*models.Card, error) {
 	args := m.Called(id)
 
@@ -40,12 +43,14 @@ func (m *MockDatabase) FindByID(id string) (*models.Card, error) {
 	return nil, args.Error(1)
 }
 
+// nolint:wrapcheck
 func (m *MockDatabase) UpdateCard(card models.Card) error {
 	args := m.Called(card)
 
 	return args.Error(0)
 }
 
+// nolint:wrapcheck
 func (m *MockDatabase) DeleteCard(id string) error {
 	args := m.Called(id)
 
