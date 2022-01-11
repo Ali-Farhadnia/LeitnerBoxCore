@@ -22,6 +22,7 @@ func (m *MockDatabase) AddNewCard(card models.Card) error {
 
 func (m *MockDatabase) GetCards() ([]models.Card, error) {
 	args := m.Called()
+
 	if v := args.Get(0); v != nil {
 		return v.([]models.Card), args.Error(1)
 	}

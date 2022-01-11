@@ -10,7 +10,9 @@ import (
 
 func TestNewCard(t *testing.T) {
 	t.Parallel()
+
 	card := models.NewCard()
+
 	assert.Equal(t, "", card.ID)
 	assert.Equal(t, []byte(nil), card.Data)
 	assert.Equal(t, 0, card.Box)

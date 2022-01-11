@@ -8,7 +8,7 @@ linters:
   disable:
     - wrapcheck
     - forbidigo
-    - wsl
+    # - wsl
     - goerr113
     - golint
     - varnamelen

@@ -48,7 +48,9 @@ func NewDB() (*DB, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	rdb := DB{client: db}
+
 	if err = rdb.createCardTable(); err != nil {
 		return nil, err
 	}
@@ -64,6 +66,7 @@ func (db *DB) checkConnection() error {
 		if err != nil {
 			return err
 		}
+
 		db.client = res
 	}
 
@@ -85,6 +88,7 @@ func (db *DB) createCardTable() error {
 		createtime datetime NOT NULL
 	);
 	`
+
 	res, err := db.client.Exec(sqlStatement)
 	if err != nil {
 		switch err.Error() {
@@ -99,14 +103,16 @@ func (db *DB) createCardTable() error {
 			if res == nil {
 				return err
 			}
+
 			e, err := res.RowsAffected()
 			if err != nil {
 				return err
 			}
+
 			if e == 0 {
 				return errors.New("somthing went wrong in create table")
 			}
-			// log.Println("books card created")
+
 			return nil
 		}
 	}
@@ -119,7 +125,9 @@ func (db *DB) AddNewCard(card models.Card) error {
 	if err := db.checkConnection(); err != nil {
 		return err
 	}
+
 	sqlStatement := `INSERT INTO card (id, box, data, createtime) VALUES ($1,$2,$3,$4)`
+
 	res, err := db.client.Exec(sqlStatement, card.ID, card.Box, card.Data, card.CreateTime)
 	if err != nil {
 		return err
@@ -129,6 +137,7 @@ func (db *DB) AddNewCard(card models.Card) error {
 	if err != nil {
 		return err
 	}
+
 	if affected == 0 {
 		return errors.New("nothing updated")
 	}
@@ -141,7 +150,9 @@ func (db *DB) GetCards() ([]models.Card, error) {
 	if err := db.checkConnection(); err != nil {
 		return nil, err
 	}
+
 	sqlStatement := `SELECT * FROM card;`
+
 	rows, err := db.client.Query(sqlStatement)
 	if err != nil {
 		return nil, err
@@ -152,15 +163,20 @@ func (db *DB) GetCards() ([]models.Card, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	cards := make([]models.Card, 0)
+
 	for rows.Next() {
 		card := models.NewCard()
+
 		err = rows.Scan(&card.ID, &card.Box, &card.Data, card.CreateTime)
 		if err != nil {
 			return nil, err
 		}
+
 		cards = append(cards, *card)
 	}
+
 	err = rows.Err()
 	if err != nil {
 		return nil, err
@@ -174,13 +190,17 @@ func (db *DB) FindByID(id string) (*models.Card, error) {
 	if err := db.checkConnection(); err != nil {
 		return nil, err
 	}
+
 	var card models.Card
+
 	sqlStatement := `SELECT * FROM card WHERE id=$1;`
 	row := db.client.QueryRow(sqlStatement, id)
+
 	err := row.Err()
 	if err != nil {
 		return nil, err
 	}
+
 	err = row.Scan(&card.ID, &card.Box, &card.Data, &card.CreateTime)
 	if err != nil {
 		return nil, err
@@ -194,6 +214,7 @@ func (db *DB) UpdateCard(card models.Card) error {
 	if err := db.checkConnection(); err != nil {
 		return err
 	}
+
 	stmt, err := db.client.Prepare("UPDATE card set box = ?, data = ?, createtime = ? where id = ?")
 	if err != nil {
 		return err
@@ -204,10 +225,12 @@ func (db *DB) UpdateCard(card models.Card) error {
 	if err != nil {
 		return err
 	}
+
 	affected, err := res.RowsAffected()
 	if err != nil {
 		return err
 	}
+
 	if affected == 0 {
 		return errors.New("nothing updated")
 	}
@@ -220,6 +243,7 @@ func (db *DB) DeleteCard(id string) error {
 	if err := db.checkConnection(); err != nil {
 		return err
 	}
+
 	stmt, err := db.client.Prepare("DELETE FROM card where id = ?")
 	if err != nil {
 		return err
@@ -230,10 +254,12 @@ func (db *DB) DeleteCard(id string) error {
 	if err != nil {
 		return err
 	}
+
 	affected, err := res.RowsAffected()
 	if err != nil {
 		return err
 	}
+
 	if affected == 0 {
 		return errors.New("nothing deleted")
 	}

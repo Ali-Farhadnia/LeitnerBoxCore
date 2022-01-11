@@ -17,7 +17,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	menu := wmenu.NewMenu("What would you like to do?")
+
 	menu.Action(func(opts []wmenu.Opt) error {
 		err := inputhandler.HandleFunc(db, opts)
 		if err != nil {
@@ -31,8 +33,10 @@ func main() {
 	menu.Option("exit", exit, false, nil)
 	menu.LoopOnInvalid()
 	menu.AddColor(wlog.BrightBlue, wlog.BrightYellow, wlog.BrightBlue, wlog.Red)
+
 	for {
 		fmt.Println("=========================================================")
+
 		err = menu.Run()
 		if err != nil {
 			log.Fatal(err)
