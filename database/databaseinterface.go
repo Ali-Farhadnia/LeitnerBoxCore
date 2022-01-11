@@ -1,4 +1,4 @@
-package database_interface
+package databaseinterface
 
 import (
 	"errors"
@@ -15,8 +15,8 @@ type Database interface {
 	DeleteCard(string) error
 }
 
-// nothing found error.
+// ErrNothingFound nothing found error.
 var ErrNothingFound = errors.New("nothing found")
 
-// somthings went wrong error.
+// ErrSomthingWentWrong somthings went wrong error.
 var ErrSomthingWentWrong = errors.New("somthings went wrong")

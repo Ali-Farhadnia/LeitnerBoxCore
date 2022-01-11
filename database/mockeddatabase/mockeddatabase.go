@@ -1,4 +1,4 @@
-package database_mocked
+package mockeddatabase
 
 import (
 	"github.com/Ali-Farhadnia/LeitnerBoxCore/models"
