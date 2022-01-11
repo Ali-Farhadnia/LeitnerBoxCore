@@ -101,6 +101,7 @@ func HandleFunc(db database_interface.Database, opts []wmenu.Opt) error {
 			return fmt.Errorf("HandleFunc error :%w", err)
 		}
 	case -1:
+		// nolint:forbidigo
 		fmt.Println("Goodby")
 		os.Exit(0)
 	}

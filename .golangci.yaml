@@ -16,4 +16,4 @@ linters:
     - varnamelen
     - cyclop
     - nolintlint
-    - forbidigo # Pending
+    - forbidigo 
