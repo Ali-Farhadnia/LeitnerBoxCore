@@ -27,7 +27,7 @@ var DBOnce sync.Once
 // getdb create sqlite database client from ./database/mydb.db.
 func getdb() (*sql.DB, error) {
 	DBOnce.Do(func() {
-		res, err := sql.Open("sqlite3", "./database/sqlite/mydb.db")
+		res, err := sql.Open("sqlite3", "./database/database_sqlite/mydb.db")
 		if err != nil {
 			errClientInstance = err
 		}
