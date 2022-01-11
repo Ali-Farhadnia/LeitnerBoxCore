@@ -9,7 +9,7 @@ linters:
     - wrapcheck
     - forbidigo
     # - wsl
-    # - goerr113
+     - goerr113
     - golint
     - varnamelen
     - revive
