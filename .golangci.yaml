@@ -12,7 +12,7 @@ linters:
     - interfacer # deprecated
     - revive # blanck import for database driver
     - funlen # func:HandleEdit
-    - dupl # in test files
+    - dupl # in test files.
     - varnamelen
     - cyclop
     - nolintlint
