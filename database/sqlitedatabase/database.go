@@ -27,7 +27,7 @@ var DBOnce sync.Once
 // getdb create sqlite database client from ./database/mydb.db.
 func getdb() (*sql.DB, error) {
 	DBOnce.Do(func() {
-		res, err := sql.Open("sqlite3", "./database/database_sqlite/mydb.db")
+		res, err := sql.Open("sqlite3", "./database/sqlitedatabase/mydb.db")
 		if err != nil {
 			errClientInstance = err
 		}
@@ -39,7 +39,7 @@ func getdb() (*sql.DB, error) {
 
 // DB is database type that implement database interface.
 type DB struct {
-	client *sql.DB
+	Client *sql.DB
 }
 
 // NewDB create new DB struct.
@@ -49,36 +49,17 @@ func NewDB() (*DB, error) {
 		return nil, err
 	}
 
-	rdb := DB{client: db}
+	rdb := DB{Client: db}
 
-	if err = rdb.createCardTable(); err != nil {
+	if err = rdb.CreateCardTable(); err != nil {
 		return nil, fmt.Errorf("newdb error :%w", err)
 	}
 
 	return &rdb, nil
 }
 
-// checkConnection ping database client and if not response trys to build new one.
-func (db *DB) checkConnection() error {
-	err := db.client.Ping()
-	if err != nil {
-		res, err := getdb()
-		if err != nil {
-			return fmt.Errorf("checkConnection error :%w", err)
-		}
-
-		db.client = res
-	}
-
-	return nil
-}
-
-// createCardTable check if card table exist or not and if not creates one.
-func (db *DB) createCardTable() error {
-	if err := db.checkConnection(); err != nil {
-		return fmt.Errorf("createCardTable error :%w", err)
-	}
-
+// CreateCardTable check if card table exist or not and if not creates one.
+func (db *DB) CreateCardTable() error {
 	e := fmt.Sprintf("table %s already exists", "card")
 	sqlStatement := `
 	CREATE TABLE card (
@@ -89,7 +70,7 @@ func (db *DB) createCardTable() error {
 	);
 	`
 
-	res, err := db.client.Exec(sqlStatement)
+	res, err := db.Client.Exec(sqlStatement)
 	if err != nil {
 		switch err.Error() {
 		case e:
@@ -122,13 +103,9 @@ func (db *DB) createCardTable() error {
 
 // AddNewCard get card and add it to database.
 func (db *DB) AddNewCard(card models.Card) error {
-	if err := db.checkConnection(); err != nil {
-		return fmt.Errorf("AddNewCard error :%w", err)
-	}
-
 	sqlStatement := `INSERT INTO card (id, box, data, createtime) VALUES ($1,$2,$3,$4)`
 
-	res, err := db.client.Exec(sqlStatement, card.ID, card.Box, card.Data, card.CreateTime)
+	res, err := db.Client.Exec(sqlStatement, card.ID, card.Box, card.Data, card.CreateTime)
 	if err != nil {
 		return fmt.Errorf("AddNewCard error :%w", err)
 	}
@@ -147,13 +124,9 @@ func (db *DB) AddNewCard(card models.Card) error {
 
 // GetCards query all cards from database and return them.
 func (db *DB) GetCards() ([]models.Card, error) {
-	if err := db.checkConnection(); err != nil {
-		return nil, fmt.Errorf("GetCards error :%w", err)
-	}
-
 	sqlStatement := `SELECT * FROM card;`
 
-	rows, err := db.client.Query(sqlStatement)
+	rows, err := db.Client.Query(sqlStatement)
 	if err != nil {
 		return nil, fmt.Errorf("GetCards error :%w", err)
 	}
@@ -187,14 +160,10 @@ func (db *DB) GetCards() ([]models.Card, error) {
 
 // FindByID get card d and find it in the database and return it.
 func (db *DB) FindByID(id string) (*models.Card, error) {
-	if err := db.checkConnection(); err != nil {
-		return nil, err
-	}
-
 	var card models.Card
 
 	sqlStatement := `SELECT * FROM card WHERE id=$1;`
-	row := db.client.QueryRow(sqlStatement, id)
+	row := db.Client.QueryRow(sqlStatement, id)
 
 	err := row.Err()
 	if err != nil {
@@ -211,14 +180,11 @@ func (db *DB) FindByID(id string) (*models.Card, error) {
 
 // UpdateCard get card and update it in database.
 func (db *DB) UpdateCard(card models.Card) error {
-	if err := db.checkConnection(); err != nil {
-		return fmt.Errorf("UpdateCard error :%w", err)
-	}
-
-	stmt, err := db.client.Prepare("UPDATE card set box = ?, data = ?, createtime = ? where id = ?")
+	stmt, err := db.Client.Prepare("UPDATE card set box = ?, data = ?, createtime =? where id = ?")
 	if err != nil {
 		return fmt.Errorf("UpdateCard error :%w", err)
 	}
+
 	defer stmt.Close()
 
 	res, err := stmt.Exec(card.Box, card.Data, card.CreateTime, card.ID)
@@ -240,11 +206,7 @@ func (db *DB) UpdateCard(card models.Card) error {
 
 // DeleteCard get card id and remove it from database.
 func (db *DB) DeleteCard(id string) error {
-	if err := db.checkConnection(); err != nil {
-		return fmt.Errorf("DeleteCard error :%w", err)
-	}
-
-	stmt, err := db.client.Prepare("DELETE FROM card where id = ?")
+	stmt, err := db.Client.Prepare("DELETE FROM card where id = ?")
 	if err != nil {
 		return fmt.Errorf("DeleteCard error :%w", err)
 	}
